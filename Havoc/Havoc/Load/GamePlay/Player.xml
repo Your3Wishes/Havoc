@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Player>
+  <Image>
+    <Effects>SpriteSheetEffect</Effects>
+    <Path>GamePlay/Player</Path>
+  </Image>
+  <CollisionRect>
+    <Path>GamePlay/Collision</Path>
+  </CollisionRect>
+  <MoveSpeed>250</MoveSpeed>
+  <Gravity>26</Gravity>
+  <JumpVelocity>6.7</JumpVelocity>
+</Player>

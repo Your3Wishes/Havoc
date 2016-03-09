@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>D:/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/SplashScreen/image.png</File>
+    <File>D:/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/Fonts/Orbitron.spritefont</File>
+    <File>D:/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/ScreenManager/FadeImage.png</File>
+    <File>D:/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/GamePlay/Player.png</File>
+    <File>D:/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/Levels/StaticObjects/MetalPlatform.png</File>
+    <File>D:/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/GamePlay/Collision.png</File>
+    <File>D:/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/GamePlay/Characters/Alex.png</File>
+  </SourceFiles>
+</SourceFileCollection>
