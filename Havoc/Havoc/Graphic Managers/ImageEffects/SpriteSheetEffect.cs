@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 // Used for animating a sprite sheet
 // Each row of the sprite sheet represents
 // a different animation
+// Contains an Animation class called 
 
 namespace Havoc
 {
@@ -20,8 +21,7 @@ namespace Havoc
         public Vector2 CurrentFrame;
         public Vector2 MaxNumberOfFrames;
         public int AnimationLength;
-        public Vector2 AnimationStart;
-        public Vector2 Animation;
+        public Animation CurrentAnimation;
 
         public int FrameWidth
         {
@@ -47,6 +47,8 @@ namespace Havoc
         {
             MaxNumberOfFrames = new Vector2(3, 4);
             CurrentFrame = new Vector2(1, 0);
+            CurrentAnimation = new Animation();
+            CurrentAnimation.StartFrame.X = 0;
             SwitchFrame = 100;
             FrameCounter = 0;
         }
@@ -74,7 +76,7 @@ namespace Havoc
                     CurrentFrame.X++;
 
                     if (CurrentFrame.X * FrameWidth >= image.Texture.Width)
-                        CurrentFrame.X = AnimationStart.X;
+                        CurrentFrame.X = CurrentAnimation.StartFrame.X;
 
                 }
             }
@@ -83,6 +85,17 @@ namespace Havoc
 
             image.SourceRect = new Rectangle((int)CurrentFrame.X * FrameWidth,
                 (int)CurrentFrame.Y * FrameHeight, FrameWidth, FrameHeight);
+        }
+
+        /*
+            Sets the CurrentAnimation
+            Update the current animation frame 
+            to the new animation's start frame
+        */
+        public void SetAnimation(Animation animation)
+        {
+            this.CurrentAnimation = animation;
+            CurrentFrame = animation.StartFrame;
         }
 
     }

@@ -21,6 +21,7 @@ namespace Havoc
         public float JumpVelocity; // Jump strength
         public int PlayerID; // Identifies who is Player1, Player2, etc...
         public Dictionary<string, Animation> Animations; // Contains the different player animations
+        public Animation CurrentAnimation; // The current player animation
         public Vector2 MaxNumberOfFrames; // Used to determine the maximum amount of frames in row or col
 
 
@@ -45,8 +46,10 @@ namespace Havoc
             blockedHorizontalLeft = false;
             jumpsLeft = 2;
             Animations = new Dictionary<string, Animation>();
+            Animations.Add("idle", new Animation());
             Animations.Add("walkRight", new Animation());
             Animations.Add("walkLeft", new Animation());
+            CurrentAnimation = Animations["idle"];
 
 
 

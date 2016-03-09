@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Your3Wishes/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/Levels/Level1/Sky.jpg</SourceFile>
+  <SourceFile>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/Levels/Level1/Sky.jpg</SourceFile>
   <SourceTime>2016-03-01T23:36:54-08:00</SourceTime>
-  <DestFile>C:/Users/Your3Wishes/Dropbox/CodeWorkspaces/Games/C#/Havoc/Havoc/Havoc/Content/bin/Windows/Levels/Level1/Sky.xnb</DestFile>
-  <DestTime>2016-03-07T21:53:28.2724748-08:00</DestTime>
+  <DestFile>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/bin/Windows/Levels/Level1/Sky.xnb</DestFile>
+  <DestTime>2016-03-08T22:09:23.2841151-08:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-04-29T10:14:44-07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
