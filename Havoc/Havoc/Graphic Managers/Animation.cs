@@ -5,6 +5,12 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
+// A helper class for the class SpriteSheetEffect
+// Represents an animation
+// e.g. walk, run, idle
+// Contains info needed to choose which
+// images are shown from the spritesheet
+
 namespace Havoc
 {
     public class Animation
