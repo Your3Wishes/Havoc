@@ -19,8 +19,8 @@ namespace Havoc
         public int SwitchFrame; // When to switch to next frame
         public Vector2 CurrentFrame; // The current animation frame coords
         public int NumberOfAnimations; // Total number of different animations in spritesheet
-        public int AnimationLength; // [TO BE IMPLEMENTED]
         public Animation CurrentAnimation; // The current animation to cycle through
+        public bool Animate; // Should the animation animate
 
         public int FrameWidth
         {
@@ -44,8 +44,9 @@ namespace Havoc
 
         public SpriteSheetEffect()
         {
-            SwitchFrame = 100;
+            SwitchFrame = 150;
             FrameCounter = 0;
+            Animate = true;
         }
 
 
@@ -68,10 +69,21 @@ namespace Havoc
                 if (FrameCounter >= SwitchFrame)
                 {
                     FrameCounter = 0;
-                    CurrentFrame.X++;
+                    if (Animate)
+                        CurrentFrame.X++;
 
-                    if (CurrentFrame.X * FrameWidth >= image.Texture.Width)
+
+                    if (CurrentFrame.X >= CurrentAnimation.NumberOfFrames)
+                    {
+                        if (!CurrentAnimation.repeat && Animate)
+                        {
+                            Animate = false;
+                            CurrentFrame.X--;
+                        }
+                        else
                         CurrentFrame.X = CurrentAnimation.StartFrame.X;
+                    }
+                       
 
                 }
             }
@@ -79,7 +91,7 @@ namespace Havoc
                 CurrentFrame.X = 1;
 
             image.SourceRect = new Rectangle((int)CurrentFrame.X * FrameWidth,
-                (int)CurrentFrame.Y * FrameHeight, FrameWidth, FrameHeight);
+                 (int)CurrentFrame.Y * FrameHeight, FrameWidth, FrameHeight);
         }
 
         /*
@@ -89,8 +101,14 @@ namespace Havoc
         */
         public void SetAnimation(Animation animation)
         {
+            if (this.CurrentAnimation != animation)
+                CurrentFrame.X = animation.StartFrame.X;
+
+
             this.CurrentAnimation = animation;
             CurrentFrame.Y = animation.StartFrame.Y;
+            SwitchFrame = animation.Speed;
+            Animate = true;
         }
 
     }

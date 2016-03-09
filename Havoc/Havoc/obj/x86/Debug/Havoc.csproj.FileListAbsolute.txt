@@ -124,7 +124,6 @@ C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Content\Levels\Level1\Cl
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Content\Levels\Level1\Mountains.xnb
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Content\Levels\Level1\Sky.xnb
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Content\Levels\StaticObjects\MetalPlatform.xnb
-C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Content\ScreenManager\FadeImage.xnb
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Content\SplashScreen\image.xnb
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Havoc.exe
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Havoc.pdb
@@ -148,3 +147,4 @@ C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\SharpDX.Direct2D1.xml
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\SharpDX.XInput.xml
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\SharpDX.RawInput.xml
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\SharpDX.Direct3D9.xml
+C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Content\GamePlay\Characters\Ryu.xnb

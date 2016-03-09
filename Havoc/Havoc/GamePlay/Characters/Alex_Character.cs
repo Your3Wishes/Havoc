@@ -21,23 +21,29 @@ namespace Havoc
             Gravity = 45.0f;
             JumpVelocity = 9.7f;
             Image.Effects = "SpriteSheetEffect";
-            Image.Path = "GamePlay/Characters/Alex";
+            Image.Path = "GamePlay/Characters/Ryu";
 
             // Animations
             Animations["idle"].StartFrame = new Vector2(0, 0);
-            Animations["idle"].NumberOfFrames = 3;
-            Animations["idle"].NumberOfTotalFrames = 3;
-
-            Animations["walkRight"].StartFrame = new Vector2(0, 2);
-            Animations["walkRight"].NumberOfFrames = 3;
-            Animations["walkRight"].NumberOfTotalFrames = 3;
+            Animations["idle"].NumberOfFrames = 4;
+            Animations["idle"].NumberOfTotalFrames = 5;
+            Animations["idle"].Speed = 170;
 
 
-            Animations["walkLeft"].StartFrame = new Vector2(0, 1);
-            Animations["walkLeft"].NumberOfFrames = 3;
-            Animations["walkLeft"].NumberOfTotalFrames = 3;
+            Animations["walk"].StartFrame = new Vector2(0, 1);
+            Animations["walk"].NumberOfFrames = 5;
+            Animations["walk"].NumberOfTotalFrames = 5;
+            Animations["walk"].Speed = 250;
 
-            NumberOfAnimations = 4;
+
+            Animations["jump"].StartFrame = new Vector2(0, 2);
+            Animations["jump"].NumberOfFrames = 5;
+            Animations["jump"].NumberOfTotalFrames = 5;
+            Animations["jump"].Speed = 50;
+            Animations["jump"].repeat = false;
+
+
+            NumberOfAnimations = 3;
 
             base.LoadContent();
         }

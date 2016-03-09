@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/Fonts/Orbitron.spritefont</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/Levels/Level1/Cloud1.png</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/Levels/Level1/Mountains.png</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/Levels/Level1/Sky.jpg</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/Levels/StaticObjects/MetalPlatform.png</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Characters/Alex.png</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Characters/Ryu.png</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Collision.png</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Player.png</File>
+    <File>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/SplashScreen/image.png</File>
+  </SourceFiles>
+</SourceFileCollection>
