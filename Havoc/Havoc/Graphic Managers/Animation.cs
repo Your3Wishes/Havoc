@@ -18,6 +18,16 @@ namespace Havoc
         public Vector2 StartFrame; // Starting frame coordinates in spritesheet
         public int NumberOfFrames; // Number of frames in animation
         public int NumberOfTotalFrames; // Number of total frames in sprite sheet
+        public int Speed; // Animations speed. Higher number = slower animation
+        public bool repeat; // Should the animation repeat
+
+
+        public Animation()
+        {
+            Speed = 100;
+            repeat = true;
+        }
+
 
     }
 }

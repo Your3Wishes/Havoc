@@ -27,7 +27,7 @@ namespace Havoc
         int jumpsLeft; // Number of jumps player has left
 
 
-     
+        bool facingRight; // True if player is facing to the right
         bool inAir;
        
         bool jumping;
@@ -44,14 +44,15 @@ namespace Havoc
             blockedHorizontalRight = false;
             blockedHorizontalLeft = false;
             jumpsLeft = 2;
+            facingRight = true;
             NumberOfAnimations = 0;
 
             // Animations
             Animations = new Dictionary<string, Animation>();
 
             Animations.Add("idle", new Animation());
-            Animations.Add("walkRight", new Animation());
-            Animations.Add("walkLeft", new Animation());
+            Animations.Add("walk", new Animation());
+            Animations.Add("jump", new Animation());
 
             
 
@@ -103,9 +104,11 @@ namespace Havoc
                 GravityCounter = 0;
             }
 
-            // If player is Idle
             if (Velocity.X == 0 && Velocity.Y == 0)
-                Image.IsActive = false;
+            {
+                Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
+            }
+
 
             Image.Update(gameTime);
             Image.Position += Velocity;
@@ -233,20 +236,33 @@ namespace Havoc
             {
                 if (InputManager.Instance.KeyDown(Keys.D))
                 {
+
+                    if (!facingRight)
+                        Image.SpriteEffect = SpriteEffects.None;
+                    facingRight = true;
+
+
                     if (!blockedHorizontalRight)
                         Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     //Image.SpriteSheetEffect.CurrentFrame.Y = 2;
-                    Image.SpriteSheetEffect.SetAnimation(Animations["walkRight"]);
+                    Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
                 }
                 else if (InputManager.Instance.KeyDown(Keys.A))
                 {
+                    if (facingRight)
+                        Image.SpriteEffect = SpriteEffects.FlipHorizontally;
+
+                    facingRight = false;
+
                     if (!blockedHorizontalLeft)
                         Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    //Image.SpriteSheetEffect.CurrentFrame.Y = 1;
-                    Image.SpriteSheetEffect.SetAnimation(Animations["walkLeft"]);
+                    Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
                 }
                 else
+                {
                     Velocity.X = 0;
+                }
+                   
 
 
                 if (InputManager.Instance.KeyPressed(Keys.Space))
@@ -256,6 +272,7 @@ namespace Havoc
                     if (jumpsLeft > 0)
                     {
                         jumping = true;
+                        Image.SpriteSheetEffect.SetAnimation(Animations["jump"]);
                         // Reset Gravity
                         GravityCounter = 0;
                         // Decrement Jumps

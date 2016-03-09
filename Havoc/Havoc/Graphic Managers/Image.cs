@@ -23,6 +23,7 @@ namespace Havoc
         public Rectangle SourceRect;
         public bool IsActive;
         public Vector2 Origin;
+        public SpriteEffects SpriteEffect;
 
         [XmlIgnore]
         public Texture2D Texture;
@@ -122,6 +123,7 @@ namespace Havoc
             SourceRect = Rectangle.Empty;
             effectList = new Dictionary<string, ImageEffect>();
             IsActive = true;
+            SpriteEffect = SpriteEffects.None;
         }
 
         /*
@@ -224,7 +226,7 @@ namespace Havoc
         public void Draw(SpriteBatch spriteBatch)
         {
             Origin = new Vector2(SourceRect.Width / 2, SourceRect.Height / 2);
-            spriteBatch.Draw(Texture, Position + Origin, SourceRect, Color.White * Alpha, 0.0f, Origin, Scale, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(Texture, Position + Origin, SourceRect, Color.White * Alpha, 0.0f, Origin, Scale, SpriteEffect, 0.0f);
         }
 
 
