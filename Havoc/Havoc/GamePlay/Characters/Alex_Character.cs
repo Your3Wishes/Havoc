@@ -26,16 +26,18 @@ namespace Havoc
             // Animations
             Animations["idle"].StartFrame = new Vector2(0, 0);
             Animations["idle"].NumberOfFrames = 3;
+            Animations["idle"].NumberOfTotalFrames = 3;
 
             Animations["walkRight"].StartFrame = new Vector2(0, 2);
             Animations["walkRight"].NumberOfFrames = 3;
+            Animations["walkRight"].NumberOfTotalFrames = 3;
 
-           
+
             Animations["walkLeft"].StartFrame = new Vector2(0, 1);
             Animations["walkLeft"].NumberOfFrames = 3;
+            Animations["walkLeft"].NumberOfTotalFrames = 3;
 
- 
-            MaxNumberOfFrames = new Vector2(3, 4);
+            NumberOfAnimations = 4;
 
             base.LoadContent();
         }

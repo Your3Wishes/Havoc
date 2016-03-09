@@ -21,16 +21,15 @@ namespace Havoc
         public float JumpVelocity; // Jump strength
         public int PlayerID; // Identifies who is Player1, Player2, etc...
         public Dictionary<string, Animation> Animations; // Contains the different player animations
-        public Animation CurrentAnimation; // The current player animation
-        public Vector2 MaxNumberOfFrames; // Used to determine the maximum amount of frames in row or col
+        public int NumberOfAnimations; // Number of different animations for player
 
 
         int jumpsLeft; // Number of jumps player has left
 
 
-        bool collidedWithGameObject;
+     
         bool inAir;
-        bool landing;
+       
         bool jumping;
         bool blockedHorizontalRight;
         bool blockedHorizontalLeft;
@@ -38,30 +37,32 @@ namespace Havoc
         public Player()
         {
             Velocity = Vector2.Zero;
-            collidedWithGameObject = false;
+            
             inAir = false;
-            landing = false;
+            
             jumping = false;
             blockedHorizontalRight = false;
             blockedHorizontalLeft = false;
             jumpsLeft = 2;
+            NumberOfAnimations = 0;
+
+            // Animations
             Animations = new Dictionary<string, Animation>();
+
             Animations.Add("idle", new Animation());
             Animations.Add("walkRight", new Animation());
             Animations.Add("walkLeft", new Animation());
-            CurrentAnimation = Animations["idle"];
 
-
-
+            
 
         }
 
         public virtual void LoadContent()
         {
             Image.LoadContent();
-            //CollisionRect.LoadContent();
-            Image.Position.X = (ScreenManager.Instance.Dimensions.X / 2) - 100;
-            Image.SpriteSheetEffect.MaxNumberOfFrames = MaxNumberOfFrames;
+            Image.Position.X = (ScreenManager.Instance.Dimensions.X / 2) - 100; // Set initial player position
+            Image.SpriteSheetEffect.NumberOfAnimations = NumberOfAnimations;
+            Image.SpriteSheetEffect.SetAnimation(Animations["idle"]); // Set animation to idle
         }
 
         public void UnloadContent()
@@ -129,10 +130,8 @@ namespace Havoc
             {
                 // Collision Occured
                 // Assume not falling now
-                collidedWithGameObject = true;
+               
    
-                
-
                 // If player is above the object, set players Y position 
                 // so that the player lands exactly on top of platform
                 // If we don't do this, player may glitch and land inside 
@@ -141,20 +140,26 @@ namespace Havoc
                 {
 
                     // Landed on top of platform
-                    if ((Image.Position.X + Image.SourceRect.Width) > gameObject.Image.Position.X && 
-                        Image.Position.X < gameObject.Image.Position.X + gameObject.Image.SourceRect.Width)
+                    if ((Image.Position.X + Image.SourceRect.Width) - 10 > gameObject.Image.Position.X && 
+                        Image.Position.X + 10 < gameObject.Image.Position.X + gameObject.Image.SourceRect.Width)
                     {
                         Image.Position.Y = gameObject.Image.Position.Y - (Image.SourceRect.Height - 1);
                         Velocity.Y = 0;
-                        inAir = false;  // Player isn't jumping
-                        jumping = false;
-                        jumpsLeft = 2;
+                        inAir = false;  // Player isn't in the air
+                        // Reset gravity counter
+                        GravityCounter = 0;
+
+                    }
+                    else // Besides the platform
+                    {
+                        inAir = true;
                     }
 
-                    // Reset gravity counter
-                    GravityCounter = 0;
- 
-                    
+                    // Reset jumps
+                    jumping = false;
+                    jumpsLeft = 2;
+
+
                 }
 
                 // Collided with the left side of the object. Blocked on right
@@ -171,13 +176,28 @@ namespace Havoc
                     blockedHorizontalRight = false;
                     blockedHorizontalLeft = true;
                 }
-                
-                
+
+                // Collided with the bottom of the object
+                if (Image.Position.Y + 20 > gameObject.Image.Position.Y + gameObject.Image.SourceRect.Height)
+                {
+                    // If in the middle of platform
+                    if ((Image.Position.X + Image.SourceRect.Width) - 10 > gameObject.Image.Position.X &&
+                        Image.Position.X + 10 < gameObject.Image.Position.X + gameObject.Image.SourceRect.Width)
+                    {
+                        Velocity.Y = 0;
+                        GravityCounter = 0;
+                        jumping = false;
+                        inAir = true;
+                    }
+                    
+                    
+                }
+
             }
             else
             {
                 // Did not collide with object
-                collidedWithGameObject = false;
+               
                 inAir = true;
                 blockedHorizontalRight = false;
                 blockedHorizontalLeft = false;
@@ -215,13 +235,15 @@ namespace Havoc
                 {
                     if (!blockedHorizontalRight)
                         Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    Image.SpriteSheetEffect.CurrentFrame.Y = 2;
+                    //Image.SpriteSheetEffect.CurrentFrame.Y = 2;
+                    Image.SpriteSheetEffect.SetAnimation(Animations["walkRight"]);
                 }
                 else if (InputManager.Instance.KeyDown(Keys.A))
                 {
                     if (!blockedHorizontalLeft)
                         Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    Image.SpriteSheetEffect.CurrentFrame.Y = 1;
+                    //Image.SpriteSheetEffect.CurrentFrame.Y = 1;
+                    Image.SpriteSheetEffect.SetAnimation(Animations["walkLeft"]);
                 }
                 else
                     Velocity.X = 0;
