@@ -10,25 +10,24 @@ using Microsoft.Xna.Framework;
 // Used for animating a sprite sheet
 // Each row of the sprite sheet represents
 // a different animation
-// Contains an Animation class called 
 
 namespace Havoc
 {
     public class SpriteSheetEffect : ImageEffect
     {
-        public int FrameCounter;
-        public int SwitchFrame;
-        public Vector2 CurrentFrame;
-        public Vector2 MaxNumberOfFrames;
-        public int AnimationLength;
-        public Animation CurrentAnimation;
+        public int FrameCounter; // Counter for switching frames
+        public int SwitchFrame; // When to switch to next frame
+        public Vector2 CurrentFrame; // The current animation frame coords
+        public int NumberOfAnimations; // Total number of different animations in spritesheet
+        public int AnimationLength; // [TO BE IMPLEMENTED]
+        public Animation CurrentAnimation; // The current animation to cycle through
 
         public int FrameWidth
         {
             get
             {
                 if (image.Texture != null)
-                    return image.Texture.Width / (int)MaxNumberOfFrames.X;
+                    return image.Texture.Width / (int)CurrentAnimation.NumberOfTotalFrames;
                 return 0;
             }
         }
@@ -38,17 +37,13 @@ namespace Havoc
             get
             {
                 if (image.Texture != null)
-                    return image.Texture.Height / (int)MaxNumberOfFrames.Y;
+                    return image.Texture.Height / (int)NumberOfAnimations;
                 return 0;
             }
         }
 
         public SpriteSheetEffect()
         {
-            MaxNumberOfFrames = new Vector2(3, 4);
-            CurrentFrame = new Vector2(1, 0);
-            CurrentAnimation = new Animation();
-            CurrentAnimation.StartFrame.X = 0;
             SwitchFrame = 100;
             FrameCounter = 0;
         }
@@ -95,7 +90,7 @@ namespace Havoc
         public void SetAnimation(Animation animation)
         {
             this.CurrentAnimation = animation;
-            CurrentFrame = animation.StartFrame;
+            CurrentFrame.Y = animation.StartFrame.Y;
         }
 
     }
