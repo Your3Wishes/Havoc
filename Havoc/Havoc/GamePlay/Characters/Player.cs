@@ -28,6 +28,7 @@ namespace Havoc
 
 
         bool facingRight; // True if player is facing to the right
+        bool kicking; // True if player is kicking
         bool inAir;
        
         bool jumping;
@@ -53,6 +54,7 @@ namespace Havoc
             Animations.Add("idle", new Animation());
             Animations.Add("walk", new Animation());
             Animations.Add("jump", new Animation());
+            Animations.Add("kick", new Animation());
 
             
 
@@ -104,9 +106,19 @@ namespace Havoc
                 GravityCounter = 0;
             }
 
-            if (Velocity.X == 0 && Velocity.Y == 0)
+            if (Velocity.X == 0 && Velocity.Y == 0 && !kicking)
             {
                 Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
+            }
+
+            if (kicking)
+            {
+                // Check to see if done kicking
+                if (!Image.SpriteSheetEffect.Animate)
+                {
+                    kicking = false;
+                    
+                }
             }
 
 
@@ -159,9 +171,6 @@ namespace Havoc
                         inAir = true;
                     }
 
-                    
-
-
                 }
 
                 // Collided with the left side of the object. Blocked on right
@@ -207,13 +216,6 @@ namespace Havoc
 
         }
 
-
-        public void CollideWithGameObject()
-        {
-           
-
-        }
-
         public void Fall(GameTime gameTime)
         {
             GravityCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -225,43 +227,44 @@ namespace Havoc
             Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)JumpVelocity/ 10);
         }
 
-       
-
-
-
         public void HandleInput(GameTime gameTime)
         {
             if (PlayerID == 1)
             {
                 if (InputManager.Instance.KeyDown(Keys.D))
                 {
+                    if (!kicking)
+                    {
+                        if (!facingRight)
+                            Image.SpriteEffect = SpriteEffects.None;
+                        facingRight = true;
 
-                    if (!facingRight)
-                        Image.SpriteEffect = SpriteEffects.None;
-                    facingRight = true;
 
-
-                    if (!blockedHorizontalRight)
-                        Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                        if (!blockedHorizontalRight)
+                            Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                    }
+                    
                 }
                 else if (InputManager.Instance.KeyDown(Keys.A))
                 {
-                    if (facingRight)
-                        Image.SpriteEffect = SpriteEffects.FlipHorizontally;
+                    if (!kicking)
+                    {
+                        if (facingRight)
+                            Image.SpriteEffect = SpriteEffects.FlipHorizontally;
 
-                    facingRight = false;
+                        facingRight = false;
 
-                    if (!blockedHorizontalLeft)
-                        Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                        if (!blockedHorizontalLeft)
+                            Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                    }
+                    
                 }
                 else
                 {
                     Velocity.X = 0;
                 }
-                   
-
 
                 if (InputManager.Instance.KeyPressed(Keys.Space))
                 {
@@ -278,14 +281,12 @@ namespace Havoc
                     }
                 }
 
-                if (InputManager.Instance.KeyDown(Keys.Z))
+                if (InputManager.Instance.KeyPressed(Keys.F))
                 {
-                    Camera2D.Zoom += 0.01f;
+                    kicking = true;
+                    Image.SpriteSheetEffect.SetAnimation(Animations["kick"]);
                 }
-                if (InputManager.Instance.KeyDown(Keys.X))
-                {
-                    Camera2D.Zoom -= 0.01f;
-                }
+
             }
            
             
