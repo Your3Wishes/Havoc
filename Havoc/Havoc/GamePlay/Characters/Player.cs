@@ -132,9 +132,7 @@ namespace Havoc
             if (playerRect.Intersects(gameObjectRect))
             {
                 // Collision Occured
-                // Assume not falling now
-               
-   
+                
                 // If player is above the object, set players Y position 
                 // so that the player lands exactly on top of platform
                 // If we don't do this, player may glitch and land inside 
@@ -151,6 +149,9 @@ namespace Havoc
                         inAir = false;  // Player isn't in the air
                         // Reset gravity counter
                         GravityCounter = 0;
+                        // Reset jumps
+                        jumping = false;
+                        jumpsLeft = 2;
 
                     }
                     else // Besides the platform
@@ -158,9 +159,7 @@ namespace Havoc
                         inAir = true;
                     }
 
-                    // Reset jumps
-                    jumping = false;
-                    jumpsLeft = 2;
+                    
 
 
                 }
@@ -218,7 +217,7 @@ namespace Havoc
         public void Fall(GameTime gameTime)
         {
             GravityCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-            Velocity.Y = GravityCounter * (float)(Gravity / 1000.0);
+            Velocity.Y = GravityCounter * (float)(Gravity * 0.001f);
         }
 
         public void Jump(GameTime gameTime)
@@ -244,7 +243,6 @@ namespace Havoc
 
                     if (!blockedHorizontalRight)
                         Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    //Image.SpriteSheetEffect.CurrentFrame.Y = 2;
                     Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
                 }
                 else if (InputManager.Instance.KeyDown(Keys.A))
