@@ -49,7 +49,7 @@ namespace Havoc
             Velocity = Vector2.Zero;
             
             inAir = false;
-            
+            Gravity = 45.0f;
             jumping = false;
             blockedHorizontalRight = false;
             blockedHorizontalLeft = false;
@@ -289,7 +289,8 @@ namespace Havoc
                         Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 }
-                Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                if (!jumping)
+                    Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
             }
         }
 
@@ -310,7 +311,8 @@ namespace Havoc
                         Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 }
-                Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                if (!jumping)
+                    Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
             }
         }
 

@@ -19,7 +19,7 @@ namespace Havoc
           
             MoveSpeed = 345;
             MoveSpeedInAir = 225;
-            Gravity = 45.0f;
+            
             JumpVelocity = 9.7f;
             Image.Effects = "SpriteSheetEffect";
             Image.Path = "GamePlay/Characters/Ryu1";
@@ -43,13 +43,13 @@ namespace Havoc
             Animations["walk"].StartFrame = new Vector2(0, 1);
             Animations["walk"].NumberOfFrames = 5;
             Animations["walk"].NumberOfTotalFrames = 10;
-            Animations["walk"].Speed = 250;
+            Animations["walk"].Speed = 100;
 
 
             Animations["jump"].StartFrame = new Vector2(0, 2);
             Animations["jump"].NumberOfFrames = 5;
             Animations["jump"].NumberOfTotalFrames = 10;
-            Animations["jump"].Speed = 50;
+            Animations["jump"].Speed = 250;
             Animations["jump"].repeat = false;
 
             Animations["kick"].StartFrame = new Vector2(0, 3);
