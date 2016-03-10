@@ -8,6 +8,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
+// Represents a playable character
+// All characters in game are children
+// of this class. 
+// This is essentially the most
+// important class in the entire project!
+
 namespace Havoc
 {
     public class Player
@@ -16,12 +23,13 @@ namespace Havoc
         public Image Image; // Holds image of player. Include position, effects, etc...
         public Vector2 Velocity; // Current speed of player
         public float MoveSpeed; // Speed the player can move
-        public float Gravity; // Strength of Gravity
-        public int GravityCounter; // For calculating force of gravity
+        public float MoveSpeedInAir;  // Speed the player can move while in air
+        public float Gravity;  // Strength of Gravity
+        public int GravityCounter;  // For calculating force of gravity
         public float JumpVelocity; // Jump strength
         public int PlayerID; // Identifies who is Player1, Player2, etc...
         public Dictionary<string, Animation> Animations; // Contains the different player animations
-        public int NumberOfAnimations; // Number of different animations for player
+        public int NumberOfAnimations;  // Number of different animations for player
 
 
         int jumpsLeft; // Number of jumps player has left
@@ -37,6 +45,7 @@ namespace Havoc
 
         public Player()
         {
+            Image = new Image();
             Velocity = Vector2.Zero;
             
             inAir = false;
@@ -56,15 +65,13 @@ namespace Havoc
             Animations.Add("jump", new Animation());
             Animations.Add("kick", new Animation());
 
-            
-
         }
 
         public virtual void LoadContent()
         {
             Image.LoadContent();
             Image.Position.X = (ScreenManager.Instance.Dimensions.X / 2) - 100; // Set initial player position
-            Image.SpriteSheetEffect.NumberOfAnimations = NumberOfAnimations;
+            Image.SpriteSheetEffect.NumberOfAnimations = NumberOfAnimations; // Tell SpriteSheet how many different animations
             Image.SpriteSheetEffect.SetAnimation(Animations["idle"]); // Set animation to idle
         }
 
@@ -227,38 +234,21 @@ namespace Havoc
             Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)JumpVelocity/ 10);
         }
 
+
+        /*///////////////////////////////////////*
+         * START OF INPUT AND MOVEMENT FUNCTIONS *
+        */////////////////////////////////////////                                       
         public void HandleInput(GameTime gameTime)
         {
             if (PlayerID == 1)
             {
                 if (InputManager.Instance.KeyDown(Keys.D))
                 {
-                    if (!kicking)
-                    {
-                        if (!facingRight)
-                            Image.SpriteEffect = SpriteEffects.None;
-                        facingRight = true;
-
-
-                        if (!blockedHorizontalRight)
-                            Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
-                    }
-                    
+                    MoveRightInput(gameTime);   
                 }
                 else if (InputManager.Instance.KeyDown(Keys.A))
                 {
-                    if (!kicking)
-                    {
-                        if (facingRight)
-                            Image.SpriteEffect = SpriteEffects.FlipHorizontally;
-
-                        facingRight = false;
-
-                        if (!blockedHorizontalLeft)
-                            Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
-                    }
+                    MoveLeftInput(gameTime);
                     
                 }
                 else
@@ -268,23 +258,13 @@ namespace Havoc
 
                 if (InputManager.Instance.KeyPressed(Keys.Space))
                 {
+                    JumpInput();
 
-                    // If player has jumps left
-                    if (jumpsLeft > 0)
-                    {
-                        jumping = true;
-                        Image.SpriteSheetEffect.SetAnimation(Animations["jump"]);
-                        // Reset Gravity
-                        GravityCounter = 0;
-                        // Decrement Jumps
-                        jumpsLeft--;
-                    }
                 }
 
                 if (InputManager.Instance.KeyPressed(Keys.F))
                 {
-                    kicking = true;
-                    Image.SpriteSheetEffect.SetAnimation(Animations["kick"]);
+                    JabInput();
                 }
 
             }
@@ -292,10 +272,70 @@ namespace Havoc
             
         }
 
+        public void MoveRightInput(GameTime gameTime)
+        {
+            if (!kicking)
+            {
+                if (!facingRight)
+                    Image.SpriteEffect = SpriteEffects.None;
+                facingRight = true;
 
+                // If not blocked on the right
+                if (!blockedHorizontalRight)
+                {
+                    if (inAir)
+                        Velocity.X = MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    else
+                        Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                }
+                Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+            }
+        }
 
+        public void MoveLeftInput(GameTime gameTime)
+        {
+            if (!kicking)
+            {
+                if (facingRight)
+                    Image.SpriteEffect = SpriteEffects.FlipHorizontally;
 
-        
+                facingRight = false;
+
+                if (!blockedHorizontalLeft)
+                {
+                    if (inAir)
+                        Velocity.X = -MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    else
+                        Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                }
+                Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+            }
+        }
+
+        public void JumpInput()
+        {
+            // If player has jumps left
+            if (jumpsLeft > 0)
+            {
+                jumping = true;
+                Image.SpriteSheetEffect.SetAnimation(Animations["jump"]);
+                // Reset Gravity
+                GravityCounter = 0;
+                // Decrement Jumps
+                jumpsLeft--;
+            }
+        }
+
+        public void JabInput()
+        {
+            kicking = true;
+            Image.SpriteSheetEffect.SetAnimation(Animations["kick"]);
+        }
+        /*///////////////////////////////////////*
+         * END OF INPUT AND MOVEMENT FUNCTIONS *
+        */////////////////////////////////////////
+
     }
 }

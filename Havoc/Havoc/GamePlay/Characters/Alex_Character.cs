@@ -16,13 +16,23 @@ namespace Havoc
 
         public override void LoadContent()
         {
-            Image = new Image();
+          
             MoveSpeed = 345;
+            MoveSpeedInAir = 225;
             Gravity = 45.0f;
             JumpVelocity = 9.7f;
             Image.Effects = "SpriteSheetEffect";
             Image.Path = "GamePlay/Characters/Ryu1";
 
+            LoadAnimations();
+            base.LoadContent();
+        }
+
+        /*
+            Stores data for character's animations
+        */
+        public void LoadAnimations()
+        {
             // Animations
             Animations["idle"].StartFrame = new Vector2(0, 0);
             Animations["idle"].NumberOfFrames = 4;
@@ -50,8 +60,6 @@ namespace Havoc
 
 
             NumberOfAnimations = 4;
-
-            base.LoadContent();
         }
 
     

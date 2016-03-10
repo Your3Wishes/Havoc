@@ -17,7 +17,7 @@ namespace Havoc
         static public Vector2 DestinationPosition = Vector2.Zero;
         static public float Rotation = 0;
         static public float Zoom = 1.55f;
-        static public float NewZoom =1.55f;
+        static public float NewZoom = 1.55f;
         static public float MaxZoomOut = 1.5f;
         static public float MinZoomIn = 2.0f;
         static public float ZoomFactor = 603.75f;
@@ -146,7 +146,7 @@ namespace Havoc
         static public void PanZoom(GameTime gameTime)
         {
             // If NewZoom is different enough to PanZoom
-            if (Math.Abs(Zoom - NewZoom) > 0.025f)
+            if (Math.Abs(Zoom - NewZoom) > 0.045f)
             {
                 // Decide whether to zoom in or out
                 if (Zoom < NewZoom) // Zoom in
