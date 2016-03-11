@@ -29,6 +29,7 @@ namespace Havoc
         public float JumpVelocity; // Jump strength
         public int PlayerID; // Identifies who is Player1, Player2, etc...
         public Dictionary<string, Animation> Animations; // Contains the different player animations
+        public Animation CurrentAnimation; // The current player animation
         public int NumberOfAnimations;  // Number of different animations for player
 
 
@@ -36,7 +37,7 @@ namespace Havoc
 
 
         bool facingRight; // True if player is facing to the right
-        bool kicking; // True if player is kicking
+        bool attacking; // True if player is attacking
         bool inAir;
        
         bool jumping;
@@ -113,21 +114,26 @@ namespace Havoc
                 GravityCounter = 0;
             }
 
-            if (Velocity.X == 0 && Velocity.Y == 0 && !kicking)
+            if (Velocity.X == 0 && Velocity.Y == 0 && !attacking)
             {
                 Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
             }
 
-            if (kicking)
+            if (attacking)
             {
-                // Check to see if done kicking
+                // Check to see if done attacking
                 if (!Image.SpriteSheetEffect.Animate)
                 {
-                    kicking = false;
+                    attacking = false;
                     
                 }
             }
 
+
+            if (facingRight)
+                Image.SpriteEffect = SpriteEffects.None;
+            else
+                Image.SpriteEffect = SpriteEffects.FlipHorizontally;
 
             Image.Update(gameTime);
             Image.Position += Velocity;
@@ -274,10 +280,9 @@ namespace Havoc
 
         public void MoveRightInput(GameTime gameTime)
         {
-            if (!kicking)
+            if (!attacking)
             {
-                if (!facingRight)
-                    Image.SpriteEffect = SpriteEffects.None;
+                
                 facingRight = true;
 
                 // If not blocked on the right
@@ -296,11 +301,8 @@ namespace Havoc
 
         public void MoveLeftInput(GameTime gameTime)
         {
-            if (!kicking)
+            if (!attacking)
             {
-                if (facingRight)
-                    Image.SpriteEffect = SpriteEffects.FlipHorizontally;
-
                 facingRight = false;
 
                 if (!blockedHorizontalLeft)
@@ -332,7 +334,7 @@ namespace Havoc
 
         public void JabInput()
         {
-            kicking = true;
+            attacking = true;
             Image.SpriteSheetEffect.SetAnimation(Animations["kick"]);
         }
         /*///////////////////////////////////////*

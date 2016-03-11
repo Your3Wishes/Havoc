@@ -72,15 +72,16 @@ namespace Havoc
                     if (Animate)
                         CurrentFrame.X++;
 
-
+                    // If the end of the animation is reached
                     if (CurrentFrame.X >= CurrentAnimation.NumberOfFrames)
                     {
+                        // Stop non repeating animations
                         if (!CurrentAnimation.repeat && Animate)
                         {
                             Animate = false;
                             CurrentFrame.X--;
                         }
-                        else
+                        else // Start the animation over if it repeats
                         CurrentFrame.X = CurrentAnimation.StartFrame.X;
                     }
                        
