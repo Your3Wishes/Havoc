@@ -129,11 +129,12 @@ namespace Havoc
                 }
             }
 
+            Console.WriteLine(attacking);
 
             if (facingRight)
                 Image.SpriteEffect = SpriteEffects.None;
             else
-                Image.SpriteEffect = SpriteEffects.FlipHorizontally;
+               Image.SpriteEffect = SpriteEffects.FlipHorizontally;
 
             Image.Update(gameTime);
             Image.Position += Velocity;
@@ -315,7 +316,7 @@ namespace Havoc
                 }
                 if (!jumping)
                     Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
-            }
+            } 
         }
 
         public void JumpInput()

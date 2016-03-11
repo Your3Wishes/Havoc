@@ -84,8 +84,6 @@ namespace Havoc
                         else // Start the animation over if it repeats
                         CurrentFrame.X = CurrentAnimation.StartFrame.X;
                     }
-                       
-
                 }
             }
             else
