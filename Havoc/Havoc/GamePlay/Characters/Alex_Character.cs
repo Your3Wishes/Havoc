@@ -22,7 +22,7 @@ namespace Havoc
             
             JumpVelocity = 9.7f;
             Image.Effects = "SpriteSheetEffect";
-            Image.Path = "GamePlay/Characters/Ryu1";
+            Image.Path = "GamePlay/Characters/Ryu";
 
             LoadAnimations();
             base.LoadContent();
@@ -70,7 +70,13 @@ namespace Havoc
             Animations["kick"].HitBoxes[4] = new Rectangle(0, 0, 0, 0); // No hitbox on this frame
             // END KICK ANIMATION DATA
 
-            NumberOfAnimations = 4;
+            Animations["stun"].StartFrame = new Vector2(0, 4);
+            Animations["stun"].NumberOfFrames = 4;
+            Animations["stun"].NumberOfTotalFrames = 5;
+            Animations["stun"].Speed = 250;
+            Animations["stun"].Repeat = false;
+
+            NumberOfAnimations = 5;
         }
 
     

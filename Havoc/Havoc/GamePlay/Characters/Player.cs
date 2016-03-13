@@ -70,7 +70,7 @@ namespace Havoc
             
             inAir = false;
             Gravity = 45.0f;
-            KnockBackAntiVelocity = 2.0f;
+            KnockBackAntiVelocity = 1.2f;
             jumping = false;
             blockedHorizontalRight = false;
             blockedHorizontalLeft = false;
@@ -94,6 +94,7 @@ namespace Havoc
             Animations.Add("walk", new Animation());
             Animations.Add("jump", new Animation());
             Animations.Add("kick", new Animation());
+            Animations.Add("stun", new Animation());
 
         }
 
@@ -288,9 +289,16 @@ namespace Havoc
                 Health = 0;
             }
 
+            // If player is idle, set animation to idle
             if (Velocity.X == 0 && Velocity.Y == 0 && !attacking)
             {
                 Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
+            }
+
+            // If player is tacking knockback, play knock back animation
+            if (TakingKnockBack)
+            {
+                Image.SpriteSheetEffect.SetAnimation(Animations["stun"]);
             }
 
             if (attacking)
@@ -368,9 +376,6 @@ namespace Havoc
                 KnockBackVelocity.X = Health * -hitBox.KnockBack.X;
             else
                 KnockBackVelocity.X = Health * hitBox.KnockBack.X;
-
-            Console.WriteLine("This: " + Image.Position.X);
-            Console.WriteLine("player : " + player.Image.Position.X);
 
         }
 
