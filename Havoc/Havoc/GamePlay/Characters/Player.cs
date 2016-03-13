@@ -22,6 +22,7 @@ namespace Havoc
         /*///////////////////////////////////////*
          * START OF DATAMEMBERS *
         */////////////////////////////////////////   
+        public bool DEBUG_HIT_BOX = false; // USED FOR DEBUGGING HITBOXES
         public int PlayerID; // Identifies who is Player1, Player2, etc...
         public Image Image; // Holds image of player. Include position, effects, etc...
         public Vector2 Velocity; // Current speed of player
@@ -37,7 +38,17 @@ namespace Havoc
         public int NumberOfAnimations;  // Number of different animations for player
 
         public HitBox HitBox; // The hitbox of the player
-        public bool DEBUG_HIT_BOX = true; // USED FOR DEBUGGING HITBOXES
+        public bool TakingKnockBack; // If taking a knockback force
+        public Vector2 KnockBackVelocity; // KnockBack strength
+        public float KnockBackAntiVelocity;  // Counteracts horizonal knockback forces
+        public int KnockBackCounter;  // For calculating knockback anti horizonal force
+        public int Health; // The higher the number, the harder hits player takes
+
+        public bool HitStun; // The player is in hitstun (can't move)
+        public bool CanBeComboed; // False right after being hit
+        public float ComboCounter; // Used to recharge CanBeComboed
+        public float ComboMaxTimer; // When ComboCounter reaches this number, player can be comboed again
+        public bool TakeXKnockBack; // True if taking horizontal knockback
   
 
 
@@ -59,6 +70,7 @@ namespace Havoc
             
             inAir = false;
             Gravity = 45.0f;
+            KnockBackAntiVelocity = 2.0f;
             jumping = false;
             blockedHorizontalRight = false;
             blockedHorizontalLeft = false;
@@ -67,6 +79,13 @@ namespace Havoc
             NumberOfAnimations = 0;
 
             HitBox = new HitBox();
+            HitStun = false;
+            CanBeComboed = true;
+            ComboCounter = 0;
+            ComboMaxTimer = 600.0f;
+            Health = 0;
+            TakingKnockBack = false;
+            KnockBackVelocity = Vector2.Zero;
 
             // Animations
             Animations = new Dictionary<string, Animation>();
@@ -95,88 +114,16 @@ namespace Havoc
         {
             Image.IsActive = true;
 
-            // Handle Gravity
-            // If we are in the air, then fall
-            if (inAir)
-            {
-                Fall(gameTime);
-            }
-            else 
-            {
-                Velocity.Y = 0;
-            }
+            // Resest the hitbox
+            HitBox.Rectangle = new Rectangle();
+
+            HandleLogic(gameTime);
 
             // Handle Input
             HandleInput(gameTime);
 
-            // Handle Jumping
-            if (jumping)
-            {
-                Jump(gameTime);
-            }
-
-        
-            // Respawn player if off screen
-            if (Image.Position.Y >= ScreenManager.Instance.Dimensions.Y)
-            {
-                Image.Position.Y = 0;
-                Image.Position.X = ScreenManager.Instance.Dimensions.X / 2;
-                GravityCounter = 0;
-            }
-
-            if (Velocity.X == 0 && Velocity.Y == 0 && !attacking)
-            {
-                Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
-            }
-
-
-            // Resest the hitbox
-            HitBox.Rectangle = new Rectangle();
-
-            if (attacking)
-            {
-                // Set the player's hitbox to the correct spritesheet frame's hitbox
-                try
-                {
-                    HitBox.Rectangle = Image.SpriteSheetEffect.CurrentAnimation.HitBoxes[(int)Image.SpriteSheetEffect.CurrentFrame.X];
-                    HitBox.Damage = Image.SpriteSheetEffect.CurrentAnimation.Damage;
-                }
-                catch(IndexOutOfRangeException e)
-                {
-                    HitBox.Rectangle = new Rectangle();
-                }
-
-
-                // Check to see if done attacking
-                if (!Image.SpriteSheetEffect.Animate)
-                {
-                    attacking = false;
-                }
-            }
-
-
-            if (facingRight)
-                Image.SpriteEffect = SpriteEffects.None;
-            else
-               Image.SpriteEffect = SpriteEffects.FlipHorizontally;
-
-            // Position the hitbox relative to player's image source rectangle
-            if (facingRight)
-            {
-                HitBox.Rectangle.X += (int)Image.Position.X;
-                HitBox.Rectangle.Y += (int)Image.Position.Y;
-            }
-            else
-            {
-                HitBox.Rectangle.X = ((int)Image.Position.X + Image.SourceRect.Width) - HitBox.Rectangle.X - HitBox.Rectangle.Width;
-                HitBox.Rectangle.Y += (int)Image.Position.Y;
-            }
-            
-
-
             Image.Update(gameTime);
             Image.Position += Velocity;
-
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -218,6 +165,10 @@ namespace Havoc
                         GravityCounter = 0;
                         // Reset jumps
                         jumping = false;
+                        TakingKnockBack = false;
+                        KnockBackCounter = 0;
+                        Velocity.X = 0;
+                        TakeXKnockBack = false;
                         jumpsLeft = 2;
 
                     }
@@ -253,6 +204,8 @@ namespace Havoc
                         Velocity.Y = 0;
                         GravityCounter = 0;
                         jumping = false;
+                        KnockBackCounter = 0;
+                        TakingKnockBack = false;
                         inAir = true;
                     }
                     
@@ -271,15 +224,199 @@ namespace Havoc
 
         }
 
+        /*
+            Check for a collision with a hitbox
+            Parameters: hitbox - the hitbox we are checking
+                        player - the player who owns the box
+            The player is used to decide what direction the force is coming from
+        */
+        public void CollisionCheck(HitBox hitBox, Player player)
+        {
+            if (hitBox.Rectangle.Width <= 0) return; // Empty hitbox
+
+            // Create new player collision box
+            Rectangle playerRect = new Rectangle((int)Image.Position.X, (int)Image.Position.Y, Image.SourceRect.Width, Image.SourceRect.Height);
+
+            // Player was hit!
+            if (playerRect.Intersects(hitBox.Rectangle))
+            {
+                CanBeComboed = false;
+                TakeHit(hitBox, player);
+            }
+        }
+
+      
+
+        /*
+            Handles any state-based logic for Player
+            Used for organization
+            Called from Update(GameTime gameTime)
+        */
+        public void HandleLogic(GameTime gameTime)
+        {
+            // Handle Gravity
+            // If we are in the air, then fall
+            if (inAir)
+            {
+                Fall(gameTime);
+            }
+            else
+            {
+                Velocity.Y = 0;
+            }
+
+            // Handle Jumping
+            if (jumping)
+            {
+                Jump(gameTime);
+            }
+
+            if (TakingKnockBack)
+            {
+                TakeKnockBack(gameTime);
+                //CounterKnockBack(gameTime);
+            }
+
+
+            // Respawn player if off screen
+            if (Image.Position.Y >= ScreenManager.Instance.Dimensions.Y)
+            {
+                Image.Position.Y = 0;
+                Image.Position.X = ScreenManager.Instance.Dimensions.X / 2;
+                GravityCounter = 0;
+                KnockBackCounter = 0;
+                Health = 0;
+            }
+
+            if (Velocity.X == 0 && Velocity.Y == 0 && !attacking)
+            {
+                Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
+            }
+
+            if (attacking)
+            {
+                // Set the player's hitbox to the correct spritesheet frame's hitbox
+                try
+                {
+                    HitBox.Rectangle = Image.SpriteSheetEffect.CurrentAnimation.HitBoxes[(int)Image.SpriteSheetEffect.CurrentFrame.X];
+                    HitBox.Damage = Image.SpriteSheetEffect.CurrentAnimation.Damage;
+                    HitBox.KnockBack = Image.SpriteSheetEffect.CurrentAnimation.KnockBack;
+                }
+                catch (IndexOutOfRangeException e)
+                {
+                    HitBox.Rectangle = new Rectangle();
+                }
+
+
+                // Check to see if done attacking
+                if (!Image.SpriteSheetEffect.Animate)
+                {
+                    attacking = false;
+                }
+            }
+
+            // Position the hitbox relative to player's image source rectangle
+            if (facingRight)
+            {
+                Image.SpriteEffect = SpriteEffects.None;
+                HitBox.Rectangle.X += (int)Image.Position.X;
+                HitBox.Rectangle.Y += (int)Image.Position.Y;
+            }
+            else // Facing left
+            {
+                Image.SpriteEffect = SpriteEffects.FlipHorizontally;
+                HitBox.Rectangle.X = ((int)Image.Position.X + Image.SourceRect.Width) - HitBox.Rectangle.X - HitBox.Rectangle.Width;
+                HitBox.Rectangle.Y += (int)Image.Position.Y;
+            }
+
+            // Handle logic for CanBeComboed
+            if (!CanBeComboed)
+            {
+                ComboCounter += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (ComboCounter >= ComboMaxTimer) CanBeComboed = true;
+            }
+
+
+
+        }
+
         public void Fall(GameTime gameTime)
         {
             GravityCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
             Velocity.Y = GravityCounter * (float)(Gravity * 0.001f);
         }
 
+
         public void Jump(GameTime gameTime)
         {
             Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)JumpVelocity/ 10);
+        }
+
+        /*
+          Player takes a hit from hitBox
+        */
+        public void TakeHit(HitBox hitBox, Player player)
+        {
+            TakingKnockBack = true;
+            TakeXKnockBack = true;
+            Health += (int)hitBox.Damage;
+            KnockBackCounter = 0;
+            KnockBackVelocity.Y = Health * hitBox.KnockBack.Y;
+
+            // Decide if horizontal force is to the left or right
+            if (Image.Position.X < player.Image.Position.X)
+                KnockBackVelocity.X = Health * -hitBox.KnockBack.X;
+            else
+                KnockBackVelocity.X = Health * hitBox.KnockBack.X;
+
+            Console.WriteLine("This: " + Image.Position.X);
+            Console.WriteLine("player : " + player.Image.Position.X);
+
+        }
+
+        public void TakeKnockBack(GameTime gameTime)
+        {
+            Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.Y / 10);
+            
+           
+            if (TakeXKnockBack)
+            {
+                // If player is knocked to the right
+                if (KnockBackVelocity.X > 0)
+                {
+                    // Apply a counter force to horizontal velocity
+                    KnockBackCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    KnockBackVelocity.X -= KnockBackCounter * (float)KnockBackAntiVelocity * 0.001f;
+                    Velocity.X += (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.X / 100);
+                    if (Velocity.X < 0)
+                    {
+                        Velocity.X = 0;
+                        KnockBackCounter = 0;
+                        KnockBackVelocity.X = 0;
+                        TakeXKnockBack = false;
+                    }
+                }
+                else if (KnockBackVelocity.X < 0) // If force is to the left
+                {
+                    // Apply a counter force to horizontal velocity
+                    KnockBackCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    KnockBackVelocity.X += KnockBackCounter * (float)KnockBackAntiVelocity * 0.001f;
+                    Velocity.X += (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.X / 100);
+                    if (Velocity.X > 0)
+                    {
+                        Velocity.X = 0;
+                        KnockBackCounter = 0;
+                        KnockBackVelocity.X = 0;
+                        TakeXKnockBack = false;
+                    }
+                }
+                
+
+                
+            }
+                
+            
+            
         }
 
 
@@ -301,7 +438,11 @@ namespace Havoc
                 }
                 else
                 {
-                    Velocity.X = 0;
+                    if (!TakingKnockBack)
+                    {
+                        Velocity.X = 0;
+                    }
+                        
                 }
 
                 if (InputManager.Instance.KeyPressed(Keys.Space))

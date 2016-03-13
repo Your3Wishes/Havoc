@@ -18,7 +18,7 @@ namespace Havoc
             Content.RootDirectory = "Content";
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1920, 1080);
-            Resolution.SetResolution(1280, 720, false);
+            Resolution.SetResolution(1024, 576, false);
 
             Camera2D.Origin = new Vector2(1920 / 2, 1080 / 2);
         }

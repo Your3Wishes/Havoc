@@ -57,7 +57,10 @@ namespace Havoc
             Animations["kick"].NumberOfFrames = 5;
             Animations["kick"].NumberOfTotalFrames = 5;
             Animations["kick"].Speed = 80;
-            Animations["kick"].Damage = 5.0f;
+            Animations["kick"].Damage = 3.0f;
+            Animations["kick"].KnockBack.Y = 0.05f;
+            Animations["kick"].KnockBack.X = 0.014f;
+
             Animations["kick"].Repeat = false;
             Animations["kick"].HitBoxes = new Rectangle[Animations["kick"].NumberOfFrames];
             Animations["kick"].HitBoxes[0] = new Rectangle(0, 0, 0, 0); // No hitbox on this frame

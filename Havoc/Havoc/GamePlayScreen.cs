@@ -28,6 +28,7 @@ namespace Havoc
             player1.LoadContent();
 
             player2 = new Alex_Character();
+            player2.PlayerID = 2;
             player2.LoadContent();
 
             //background = new Image();
@@ -65,13 +66,18 @@ namespace Havoc
             level.Update(gameTime);
 
 
-            // Check for collisions
+            // Check for collisions on platforms
             foreach(Platform platform in level.platforms)
             {
                 player1.CollisionCheck(platform);
                 player2.CollisionCheck(platform);
 
             }
+
+            // Check for collisions on player attacks
+            player1.CollisionCheck(player2.HitBox, player2);
+            player2.CollisionCheck(player1.HitBox, player1);
+
 
             // Update Camera
             // Point camera to new pan location

@@ -11,12 +11,14 @@ namespace Havoc
     {
         public Rectangle Rectangle;
         public float Damage;
+        public Vector2 KnockBack;
 
 
         public HitBox()
         {
             Rectangle = new Rectangle();
             Damage = 0;
+            KnockBack = Vector2.Zero;
         }
 
     }
