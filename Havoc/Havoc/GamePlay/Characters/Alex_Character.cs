@@ -50,14 +50,22 @@ namespace Havoc
             Animations["jump"].NumberOfFrames = 5;
             Animations["jump"].NumberOfTotalFrames = 10;
             Animations["jump"].Speed = 250;
-            Animations["jump"].repeat = false;
+            Animations["jump"].Repeat = false;
 
+            // KICK ANIMATION DATA
             Animations["kick"].StartFrame = new Vector2(0, 3);
             Animations["kick"].NumberOfFrames = 5;
             Animations["kick"].NumberOfTotalFrames = 5;
             Animations["kick"].Speed = 80;
-            Animations["kick"].repeat = false;
-
+            Animations["kick"].Damage = 5.0f;
+            Animations["kick"].Repeat = false;
+            Animations["kick"].HitBoxes = new Rectangle[Animations["kick"].NumberOfFrames];
+            Animations["kick"].HitBoxes[0] = new Rectangle(0, 0, 0, 0); // No hitbox on this frame
+            Animations["kick"].HitBoxes[1] = new Rectangle(55, 20, 40, 51);
+            Animations["kick"].HitBoxes[2] = new Rectangle(60, 20, 50, 60);
+            Animations["kick"].HitBoxes[3] = new Rectangle(60, 65, 33, 33);
+            Animations["kick"].HitBoxes[4] = new Rectangle(0, 0, 0, 0); // No hitbox on this frame
+            // END KICK ANIMATION DATA
 
             NumberOfAnimations = 4;
         }

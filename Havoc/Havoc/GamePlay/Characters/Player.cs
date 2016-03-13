@@ -19,7 +19,10 @@ namespace Havoc
 {
     public class Player
     {
-
+        /*///////////////////////////////////////*
+         * START OF DATAMEMBERS *
+        */////////////////////////////////////////   
+        public int PlayerID; // Identifies who is Player1, Player2, etc...
         public Image Image; // Holds image of player. Include position, effects, etc...
         public Vector2 Velocity; // Current speed of player
         public float MoveSpeed; // Speed the player can move
@@ -27,13 +30,15 @@ namespace Havoc
         public float Gravity;  // Strength of Gravity
         public int GravityCounter;  // For calculating force of gravity
         public float JumpVelocity; // Jump strength
-        public int PlayerID; // Identifies who is Player1, Player2, etc...
+        int jumpsLeft; // Number of jumps player has left
+
         public Dictionary<string, Animation> Animations; // Contains the different player animations
         public Animation CurrentAnimation; // The current player animation
         public int NumberOfAnimations;  // Number of different animations for player
 
-
-        int jumpsLeft; // Number of jumps player has left
+        public HitBox HitBox; // The hitbox of the player
+        public bool DEBUG_HIT_BOX = true; // USED FOR DEBUGGING HITBOXES
+  
 
 
         bool facingRight; // True if player is facing to the right
@@ -43,6 +48,9 @@ namespace Havoc
         bool jumping;
         bool blockedHorizontalRight;
         bool blockedHorizontalLeft;
+        /*///////////////////////////////////////*
+         * END OF DATAMEMBERS *
+        */////////////////////////////////////////   
 
         public Player()
         {
@@ -57,6 +65,8 @@ namespace Havoc
             jumpsLeft = 2;
             facingRight = true;
             NumberOfAnimations = 0;
+
+            HitBox = new HitBox();
 
             // Animations
             Animations = new Dictionary<string, Animation>();
@@ -119,22 +129,50 @@ namespace Havoc
                 Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
             }
 
+
+            // Resest the hitbox
+            HitBox.Rectangle = new Rectangle();
+
             if (attacking)
             {
+                // Set the player's hitbox to the correct spritesheet frame's hitbox
+                try
+                {
+                    HitBox.Rectangle = Image.SpriteSheetEffect.CurrentAnimation.HitBoxes[(int)Image.SpriteSheetEffect.CurrentFrame.X];
+                    HitBox.Damage = Image.SpriteSheetEffect.CurrentAnimation.Damage;
+                }
+                catch(IndexOutOfRangeException e)
+                {
+                    HitBox.Rectangle = new Rectangle();
+                }
+
+
                 // Check to see if done attacking
                 if (!Image.SpriteSheetEffect.Animate)
                 {
                     attacking = false;
-                    
                 }
             }
 
-            Console.WriteLine(attacking);
 
             if (facingRight)
                 Image.SpriteEffect = SpriteEffects.None;
             else
                Image.SpriteEffect = SpriteEffects.FlipHorizontally;
+
+            // Position the hitbox relative to player's image source rectangle
+            if (facingRight)
+            {
+                HitBox.Rectangle.X += (int)Image.Position.X;
+                HitBox.Rectangle.Y += (int)Image.Position.Y;
+            }
+            else
+            {
+                HitBox.Rectangle.X = ((int)Image.Position.X + Image.SourceRect.Width) - HitBox.Rectangle.X - HitBox.Rectangle.Width;
+                HitBox.Rectangle.Y += (int)Image.Position.Y;
+            }
+            
+
 
             Image.Update(gameTime);
             Image.Position += Velocity;
@@ -144,6 +182,9 @@ namespace Havoc
         public void Draw(SpriteBatch spriteBatch)
         {
             Image.Draw(spriteBatch);
+            if (DEBUG_HIT_BOX)
+                DrawRectangle(HitBox.Rectangle, Color.Aquamarine, spriteBatch);
+           
         }
 
 
@@ -342,5 +383,17 @@ namespace Havoc
          * END OF INPUT AND MOVEMENT FUNCTIONS *
         */////////////////////////////////////////
 
+        /*
+            Used for debugging purposes
+            Draws location of hitbox
+        */
+        private void DrawRectangle(Rectangle coords, Color color, SpriteBatch spriteBatch)
+        {
+            var rect = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
+            rect.SetData(new[] { color });
+            spriteBatch.Draw(rect, coords, color);
+        }
+
     }
+
 }

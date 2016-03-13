@@ -76,7 +76,7 @@ namespace Havoc
                     if (CurrentFrame.X >= CurrentAnimation.NumberOfFrames)
                     {
                         // Stop non repeating animations
-                        if (!CurrentAnimation.repeat && Animate)
+                        if (!CurrentAnimation.Repeat && Animate)
                         {
                             Animate = false;
                             CurrentFrame.X--;

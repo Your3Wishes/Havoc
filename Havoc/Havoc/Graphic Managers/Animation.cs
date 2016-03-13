@@ -19,13 +19,19 @@ namespace Havoc
         public int NumberOfFrames; // Number of frames in animation
         public int NumberOfTotalFrames; // Number of total frames in sprite sheet
         public int Speed; // Animations speed. Higher number = slower animation
-        public bool repeat; // Should the animation repeat
+        public float Damage; // Damage that this animation does (if any)
+        public bool Repeat; // Should the animation repeat
+        public bool HasHitBoxes; // If the animation contains hitboxes (an attack)
+        public Rectangle[] HitBoxes; // Contains hitbox info for each frame of animation
 
 
         public Animation()
         {
             Speed = 100;
-            repeat = true;
+            Damage = 0;
+            Repeat = true;
+            HitBoxes = new Rectangle[0];
+
         }
 
 

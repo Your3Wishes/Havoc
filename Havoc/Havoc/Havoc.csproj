@@ -55,6 +55,7 @@
     <Compile Include="Graphic Managers\ImageEffects\PanLoopEffect.cs" />
     <Compile Include="Graphic Managers\Resolution.cs" />
     <Compile Include="Graphic Managers\ImageEffects\SpriteSheetEffect.cs" />
+    <Compile Include="HitBox.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="GamePlay\Levels\Level.cs" />
     <Compile Include="Menus\Menu.cs" />
