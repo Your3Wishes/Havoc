@@ -15,7 +15,6 @@ namespace Havoc
         Player player1;
         Player player2;
         Level level;
-        Platform platform;
 
         public override void LoadContent()
         {
@@ -31,19 +30,8 @@ namespace Havoc
             player2.PlayerID = 2;
             player2.LoadContent();
 
-            //background = new Image();
-            //background.Texture = content.Load<Texture2D>("Levels/BackGrounds/level1");
-            //background.Position.X = (ScreenManager.Instance.Dimensions.X / 2) - (background.Texture.Width / 2);
-            //background.Position.Y = (ScreenManager.Instance.Dimensions.Y / 2) - (background.Texture.Height / 2);
-
-            //background.LoadContent();
             level = new Test_Level();
             level.LoadContent();
-
-            //platform = new Platform();
-            //platform.Image.Texture = content.Load<Texture2D>("Levels/StaticObjects/MetalPlatform");
-            //platform.LoadContent();
-            
 
         }
 
@@ -62,7 +50,6 @@ namespace Havoc
             base.Update(gameTime);
             player1.Update(gameTime);
             player2.Update(gameTime);
-            //platform.Update(gameTime);
             level.Update(gameTime);
 
 
@@ -74,11 +61,11 @@ namespace Havoc
 
             }
 
+           
             // Check for collisions on player attacks
             player1.CollisionCheck(player2.HitBox, player2);
             player2.CollisionCheck(player1.HitBox, player1);
-
-
+            
             // Update Camera
             // Point camera to new pan location
             Camera2D.PointCameraTo(GetCenterOfPlayers(player1, player2) - Camera2D.Origin); // For panning camera
