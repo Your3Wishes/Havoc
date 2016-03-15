@@ -17,10 +17,12 @@ namespace Havoc
         public override void LoadContent()
         {
           
-            MoveSpeed = 345;
+            MoveSpeed = 9;
+            AccelerateSpeed = 50.5f;
+            DeccelerateSpeed = 140.5f;
             MoveSpeedInAir = 225;
-            
-            JumpVelocity = 9.7f;
+
+            JumpVelocity = 12.7f;
             Image.Effects = "SpriteSheetEffect";
             Image.Path = "GamePlay/Characters/Ryu";
 
@@ -58,8 +60,8 @@ namespace Havoc
             Animations["kick"].NumberOfTotalFrames = 5;
             Animations["kick"].Speed = 60;
             Animations["kick"].Damage = 3.0f;
-            Animations["kick"].KnockBack.Y = 0.03f;
-            Animations["kick"].KnockBack.X = 0.002f;
+            Animations["kick"].KnockBack.Y = 0.006f;
+            Animations["kick"].KnockBack.X = 0.0012f;
 
             Animations["kick"].Repeat = false;
             Animations["kick"].HitBoxes = new Rectangle[Animations["kick"].NumberOfFrames];

@@ -19,7 +19,7 @@ namespace Havoc
         static public float Zoom = 1.55f;
         static public float NewZoom = 1.55f;
         static public float MaxZoomOut = 1.5f;
-        static public float MinZoomIn = 2.0f;
+        static public float MinZoomIn = 2.3f;
         static public float ZoomFactor = 603.75f;
         static public float ZoomSpeed = 0.00005f;
 

@@ -26,10 +26,13 @@ namespace Havoc
         public int PlayerID; // Identifies who is Player1, Player2, etc...
         public Image Image; // Holds image of player. Include position, effects, etc...
         public Vector2 Velocity; // Current speed of player
-        public float MoveSpeed; // Speed the player can move
+        public float MoveSpeed; // Max Speed the player can move
+        public bool Accelerating; // If accelerating movement
+        public float AccelerateSpeed; // Speed the player accelerates (movement)
+        public bool Deccelerating; // If deccelerating movement
+        public float DeccelerateSpeed; // Speed the player deccelerates (movement)
         public float MoveSpeedInAir;  // Speed the player can move while in air
         public float Gravity;  // Strength of Gravity
-        public int GravityCounter;  // For calculating force of gravity
         public float JumpVelocity; // Jump strength
         int jumpsLeft; // Number of jumps player has left
 
@@ -69,7 +72,7 @@ namespace Havoc
             Velocity = Vector2.Zero;
             
             inAir = false;
-            Gravity = 45.0f;
+            Gravity = 37.0f;
             KnockBackAntiVelocity = 0.68f;
             jumping = false;
             blockedHorizontalRight = false;
@@ -118,10 +121,10 @@ namespace Havoc
             // Resest the hitbox
             HitBox.Rectangle = new Rectangle();
 
-            HandleLogic(gameTime);
-
             // Handle Input
             HandleInput(gameTime);
+
+            HandleLogic(gameTime);
 
             Image.Update(gameTime);
             Image.Position += Velocity;
@@ -162,8 +165,6 @@ namespace Havoc
                         Image.Position.Y = gameObject.Image.Position.Y - (Image.SourceRect.Height - 1);
                         Velocity.Y = 0;
                         inAir = false;  // Player isn't in the air
-                        // Reset gravity counter
-                        GravityCounter = 0;
                         // Reset jumps
                         jumping = false;
                         TakingKnockBack = false;
@@ -176,6 +177,7 @@ namespace Havoc
                     else // Besides the platform
                     {
                         inAir = true;
+                        //Velocity.X = 0;
                     }
 
                 }
@@ -203,7 +205,6 @@ namespace Havoc
                         Image.Position.X + 10 < gameObject.Image.Position.X + gameObject.Image.SourceRect.Width)
                     {
                         Velocity.Y = 0;
-                        GravityCounter = 0;
                         jumping = false;
                         KnockBackCounter = 0;
                         TakingKnockBack = false;
@@ -241,8 +242,12 @@ namespace Havoc
             // Player was hit!
             if (playerRect.Intersects(hitBox.Rectangle))
             {
-                CanBeComboed = false;
-                TakeHit(hitBox, player);
+                //CanBeComboed = false;
+                if (CanBeComboed)
+                {
+                    TakeHit(hitBox, player);
+                    CanBeComboed = false;
+                }
             }
         }
 
@@ -255,21 +260,36 @@ namespace Havoc
         */
         public void HandleLogic(GameTime gameTime)
         {
+           
+
             // Handle Gravity
             // If we are in the air, then fall
             if (inAir)
             {
                 Fall(gameTime);
+                Accelerating = false;
+                Deccelerating = false;
             }
             else
             {
-                Velocity.Y = 0;
+                //Velocity.Y = 0;
             }
 
             // Handle Jumping
-            if (jumping)
+            //if (jumping)
+            //{
+            //    Jump(gameTime);
+            //}
+
+            // Handle moving
+            if (Accelerating)
             {
-                Jump(gameTime);
+                Accelerate(gameTime);
+            }
+
+            if (Deccelerating)
+            {
+                Deccelerate(gameTime);
             }
 
             if (TakingKnockBack)
@@ -284,7 +304,7 @@ namespace Havoc
             {
                 Image.Position.Y = 0;
                 Image.Position.X = ScreenManager.Instance.Dimensions.X / 2;
-                GravityCounter = 0;
+                Velocity = Vector2.Zero;
                 KnockBackCounter = 0;
                 Health = 0;
             }
@@ -315,7 +335,6 @@ namespace Havoc
                     HitBox.Rectangle = new Rectangle();
                 }
 
-
                 // Check to see if done attacking
                 if (!Image.SpriteSheetEffect.Animate)
                 {
@@ -340,24 +359,66 @@ namespace Havoc
             // Handle logic for CanBeComboed
             if (!CanBeComboed)
             {
+                Image.SpriteSheetEffect.SetAnimation(Animations["stun"]);
                 ComboCounter += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (ComboCounter >= ComboMaxTimer) CanBeComboed = true;
             }
-
-
 
         }
 
         public void Fall(GameTime gameTime)
         {
-            GravityCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-            Velocity.Y = GravityCounter * (float)(Gravity * 0.001f);
+            Velocity.Y += Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
 
-        public void Jump(GameTime gameTime)
+        public void Jump()
         {
-            Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)JumpVelocity * 0.1f);
+            Velocity.Y = -JumpVelocity;
+        }
+
+        /*
+            Accelerates the player forward to max speed
+            based on the direction they are facing
+        */
+        public void Accelerate(GameTime gameTime)
+        {
+            if (facingRight)
+                Velocity.X += AccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            else
+                Velocity.X -= AccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
+        /*
+            Deccelerates the player to 0 horizontal speed
+            based on the direction they are facing
+        */
+        public void Deccelerate(GameTime gameTime)
+        {
+            if (facingRight)
+                Velocity.X -= DeccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            else
+                Velocity.X += DeccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            // Decide to stop Decceleration
+            if (facingRight)
+            {
+                // If stopped
+                if (Velocity.X <= 0)
+                {
+                    Velocity.X = 0;
+                    Deccelerating = false;
+                }
+            }
+            else // Facing left
+            {
+                // If stopped
+                if (Velocity.X >= 0)
+                {
+                    Velocity.X = 0;
+                    Deccelerating = false;
+                }
+            }
+
         }
 
         /*
@@ -366,12 +427,14 @@ namespace Havoc
         public void TakeHit(HitBox hitBox, Player player)
         {
             TakingKnockBack = true;
+            // Reset the stun animation everytime player gets hit
+            if (Image.SpriteSheetEffect.CurrentAnimation == Animations["stun"])
+                Image.SpriteSheetEffect.CurrentFrame.X = Image.SpriteSheetEffect.CurrentAnimation.StartFrame.X;
             TakeXKnockBack = true;
             Health += (int)hitBox.Damage;
             KnockBackCounter = 0;
             KnockBackVelocity.Y = Health * hitBox.KnockBack.Y;
 
-            GravityCounter = 0;
 
             // Decide if horizontal force is to the left or right
             if (Image.Position.X < player.Image.Position.X)
@@ -380,12 +443,13 @@ namespace Havoc
                 KnockBackVelocity.X = Health * hitBox.KnockBack.X;
 
             Velocity.X += KnockBackVelocity.X;
+            Velocity.Y -= KnockBackVelocity.Y;
 
         }
 
         public void TakeKnockBack(GameTime gameTime)
         {
-            Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.Y * 0.1f);
+            //Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.Y * 0.1f);
             
             if (TakeXKnockBack)
             {
@@ -393,9 +457,8 @@ namespace Havoc
                 // If player is knocked to the right
                 if (KnockBackVelocity.X > 0)
                 {
-                    // Apply a counter force to horizontal velocity
-                    KnockBackCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    Velocity.X -= KnockBackCounter * (float)KnockBackAntiVelocity * 0.001f;
+                    // Apply a counter force to horizontal velocitu
+                    Velocity.X -= KnockBackAntiVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (Velocity.X < 0)
                     {
                         Velocity.X = 0;
@@ -407,8 +470,7 @@ namespace Havoc
                 else if (KnockBackVelocity.X < 0) // If force is to the left
                 {
                     // Apply a counter force to horizontal velocity
-                    KnockBackCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    Velocity.X += KnockBackCounter * (float)KnockBackAntiVelocity * 0.001f;
+                    Velocity.X += KnockBackAntiVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (Velocity.X > 0)
                     {
                         Velocity.X = 0;
@@ -440,11 +502,7 @@ namespace Havoc
                 }
                 else
                 {
-                    if (!TakingKnockBack)
-                    {
-                        Velocity.X = 0;
-                    }
-                        
+                    NoMovementInput(gameTime);
                 }
 
                 if (InputManager.Instance.KeyPressed(Keys.Space))
@@ -463,24 +521,60 @@ namespace Havoc
             
         }
 
+        public void NoMovementInput(GameTime gameTime)
+        {
+            if (!TakingKnockBack)
+            {
+                //Velocity.X = 0;
+                // Deccelerate
+                if (!inAir)
+                {
+                    Deccelerating = true;
+                    
+                }
+                
+            }
+            Accelerating = false;
+        }
+
         public void MoveRightInput(GameTime gameTime)
         {
             if (!attacking)
             {
-                
+                // Deccelerate if player moving in the opposite direction
+                if (!facingRight)
+                    Deccelerating = true;
+
                 facingRight = true;
 
                 // If not blocked on the right
                 if (!blockedHorizontalRight)
                 {
                     if (inAir)
+                    {
                         Velocity.X = MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Accelerating = false;
+                    }
                     else
-                        Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    {
+                        //Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        
+                        if ((Velocity.X >= MoveSpeed))
+                        {
+                            Velocity.X = MoveSpeed;
+                            Accelerating = false;
+                        }
+                        else
+                        {
+                            Accelerating = true;
+                        }
+                       
+                    }
 
                 }
                 else
                     Velocity.X = 0;
+               
                 if (!jumping)
                     Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
             }
@@ -490,16 +584,40 @@ namespace Havoc
         {
             if (!attacking)
             {
+                // Deccelerate if player moving in the opposite direction
+                if (facingRight)
+                    Deccelerating = true;
+
                 facingRight = false;
 
                 if (!blockedHorizontalLeft)
                 {
                     if (inAir)
+                    {
                         Velocity.X = -MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Accelerating = false;
+                    }
                     else
-                        Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    {
+                        //Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        if ((Velocity.X <= -MoveSpeed))
+                        {
+                            Velocity.X = -MoveSpeed;
+                            Accelerating = false;
+                        }
+                        else
+                        {
+                            Accelerating = true;
+                        }
+
+                    }
 
                 }
+                else // Blocked on left
+                {
+                    Velocity.X = 0;
+                }
+
                 if (!jumping)
                     Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
             } 
@@ -510,10 +628,9 @@ namespace Havoc
             // If player has jumps left
             if (jumpsLeft > 0)
             {
-                jumping = true;
+                Jump();
                 Image.SpriteSheetEffect.SetAnimation(Animations["jump"]);
-                // Reset Gravity
-                GravityCounter = 0;
+                jumping = true;
                 // Decrement Jumps
                 jumpsLeft--;
             }
@@ -521,8 +638,15 @@ namespace Havoc
 
         public void JabInput()
         {
+            
             attacking = true;
+            Accelerating = false;
             Image.SpriteSheetEffect.SetAnimation(Animations["kick"]);
+
+            // Stop player movment
+            if (!inAir)
+                Velocity.X = 0;
+
         }
         /*///////////////////////////////////////*
          * END OF INPUT AND MOVEMENT FUNCTIONS *
