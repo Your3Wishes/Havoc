@@ -17,8 +17,10 @@ namespace Havoc
         public override void LoadContent()
         {
           
-            MoveSpeed = 345;
+            MoveSpeed = 8;
+            AccelerateSpeed = 40.5f;
             MoveSpeedInAir = 225;
+
             
             JumpVelocity = 9.7f;
             Image.Effects = "SpriteSheetEffect";
