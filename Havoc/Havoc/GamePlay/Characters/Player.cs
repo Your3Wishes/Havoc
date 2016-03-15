@@ -371,11 +371,15 @@ namespace Havoc
             KnockBackCounter = 0;
             KnockBackVelocity.Y = Health * hitBox.KnockBack.Y;
 
+            GravityCounter = 0;
+
             // Decide if horizontal force is to the left or right
             if (Image.Position.X < player.Image.Position.X)
                 KnockBackVelocity.X = Health * -hitBox.KnockBack.X;
             else
                 KnockBackVelocity.X = Health * hitBox.KnockBack.X;
+
+            Velocity.X += KnockBackVelocity.X;
 
         }
 
@@ -385,13 +389,13 @@ namespace Havoc
             
             if (TakeXKnockBack)
             {
+                
                 // If player is knocked to the right
                 if (KnockBackVelocity.X > 0)
                 {
                     // Apply a counter force to horizontal velocity
                     KnockBackCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    KnockBackVelocity.X -= KnockBackCounter * (float)KnockBackAntiVelocity * 0.001f;
-                    Velocity.X += (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.X / 100);
+                    Velocity.X -= KnockBackCounter * (float)KnockBackAntiVelocity * 0.001f;
                     if (Velocity.X < 0)
                     {
                         Velocity.X = 0;
@@ -404,8 +408,7 @@ namespace Havoc
                 {
                     // Apply a counter force to horizontal velocity
                     KnockBackCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    KnockBackVelocity.X += KnockBackCounter * (float)KnockBackAntiVelocity * 0.001f;
-                    Velocity.X += (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.X / 100);
+                    Velocity.X += KnockBackCounter * (float)KnockBackAntiVelocity * 0.001f;
                     if (Velocity.X > 0)
                     {
                         Velocity.X = 0;
@@ -414,13 +417,8 @@ namespace Havoc
                         TakeXKnockBack = false;
                     }
                 }
-                
 
-                
             }
-                
-            
-            
         }
 
 
