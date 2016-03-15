@@ -357,7 +357,7 @@ namespace Havoc
 
         public void Jump(GameTime gameTime)
         {
-            Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)JumpVelocity/ 10);
+            Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)JumpVelocity * 0.1f);
         }
 
         /*
@@ -381,9 +381,8 @@ namespace Havoc
 
         public void TakeKnockBack(GameTime gameTime)
         {
-            Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.Y / 10);
+            Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.Y * 0.1f);
             
-           
             if (TakeXKnockBack)
             {
                 // If player is knocked to the right
