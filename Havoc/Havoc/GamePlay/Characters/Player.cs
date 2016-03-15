@@ -182,6 +182,7 @@ namespace Havoc
                     else // Besides the platform
                     {
                         inAir = true;
+                        //Velocity.X = 0;
                     }
 
                 }
@@ -269,6 +270,8 @@ namespace Havoc
             if (inAir)
             {
                 Fall(gameTime);
+                Accelerating = false;
+                Deccelerating = false;
             }
             else
             {
@@ -285,6 +288,11 @@ namespace Havoc
             if (Accelerating)
             {
                 Accelerate(gameTime);
+            }
+
+            if (Deccelerating)
+            {
+                Deccelerate(gameTime);
             }
 
             if (TakingKnockBack)
@@ -381,10 +389,46 @@ namespace Havoc
         public void Accelerate(GameTime gameTime)
         {
             if (facingRight)
-                AccelerateCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                //AccelerateCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                Velocity.X += AccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             else
-                AccelerateCounter -= (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-            Velocity.X = AccelerateCounter * (float)(AccelerateSpeed * 0.001f); 
+                //AccelerateCounter -= (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                Velocity.X -= AccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //Velocity.X = AccelerateCounter * (float)(AccelerateSpeed * 0.001f); 
+        }
+
+        /*
+            Deccelerates the player to 0 horizontal speed
+            based on the direction they are facing
+        */
+        public void Deccelerate(GameTime gameTime)
+        {
+            if (facingRight)
+                Velocity.X -= DeccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            else
+                Velocity.X += DeccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            // Decide to stop Decceleration
+            if (facingRight)
+            {
+                // If stopped
+                if (Velocity.X <= 0)
+                {
+                    Velocity.X = 0;
+                    Deccelerating = false;
+                    DeccelerateCounter = 0;
+                }
+            }
+            else // Facing left
+            {
+                // If stopped
+                if (Velocity.X >= 0)
+                {
+                    Velocity.X = 0;
+                    Deccelerating = false;
+                    DeccelerateCounter = 0;
+                }
+            }
+
         }
 
         /*
@@ -467,14 +511,7 @@ namespace Havoc
                 }
                 else
                 {
-                    if (!TakingKnockBack)
-                    {
-                        Velocity.X = 0;
-                        
-                    }
-                    AccelerateCounter = 0;
-                    Accelerating = false;
-
+                    NoMovementInput(gameTime);
                 }
 
                 if (InputManager.Instance.KeyPressed(Keys.Space))
@@ -493,18 +530,41 @@ namespace Havoc
             
         }
 
+        public void NoMovementInput(GameTime gameTime)
+        {
+            if (!TakingKnockBack)
+            {
+                //Velocity.X = 0;
+                // Deccelerate
+                if (!inAir)
+                {
+                    Deccelerating = true;
+                    
+                }
+                
+            }
+            AccelerateCounter = 0;
+            Accelerating = false;
+        }
+
         public void MoveRightInput(GameTime gameTime)
         {
             if (!attacking)
             {
-                
+                // Deccelerate if player moving in the opposite direction
+                if (!facingRight)
+                    Deccelerating = true;
+
                 facingRight = true;
 
                 // If not blocked on the right
                 if (!blockedHorizontalRight)
                 {
                     if (inAir)
+                    {
                         Velocity.X = MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Accelerating = false;
+                    }
                     else
                     {
                         //Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -525,6 +585,7 @@ namespace Havoc
                 }
                 else
                     Velocity.X = 0;
+               
                 if (!jumping)
                     Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
             }
@@ -534,12 +595,19 @@ namespace Havoc
         {
             if (!attacking)
             {
+                // Deccelerate if player moving in the opposite direction
+                if (facingRight)
+                    Deccelerating = true;
+
                 facingRight = false;
 
                 if (!blockedHorizontalLeft)
                 {
                     if (inAir)
+                    {
                         Velocity.X = -MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Accelerating = false;
+                    }
                     else
                     {
                         //Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;

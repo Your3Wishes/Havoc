@@ -18,10 +18,10 @@ namespace Havoc
         {
           
             MoveSpeed = 8;
-            AccelerateSpeed = 40.5f;
+            AccelerateSpeed = 50.5f;
+            DeccelerateSpeed = 140.5f;
             MoveSpeedInAir = 225;
 
-            
             JumpVelocity = 9.7f;
             Image.Effects = "SpriteSheetEffect";
             Image.Path = "GamePlay/Characters/Ryu";
