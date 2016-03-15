@@ -97,6 +97,7 @@ namespace Havoc
             Vector2 midPoint = new Vector2();
             midPoint.X = (player1.Image.Position.X + player2.Image.Position.X) / 2;
             midPoint.Y = (player1.Image.Position.Y + player2.Image.Position.Y) / 2;
+            midPoint.Y += 50;
 
             return midPoint; 
         }
