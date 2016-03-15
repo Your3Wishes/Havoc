@@ -70,7 +70,7 @@ namespace Havoc
             
             inAir = false;
             Gravity = 45.0f;
-            KnockBackAntiVelocity = 1.2f;
+            KnockBackAntiVelocity = 0.68f;
             jumping = false;
             blockedHorizontalRight = false;
             blockedHorizontalLeft = false;
@@ -479,6 +479,8 @@ namespace Havoc
                         Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 }
+                else
+                    Velocity.X = 0;
                 if (!jumping)
                     Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
             }
