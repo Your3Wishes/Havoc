@@ -278,16 +278,6 @@ namespace Havoc
                 Accelerating = false;
                 Deccelerating = false;
             }
-            else
-            {
-                //Velocity.Y = 0;
-            }
-
-            // Handle Jumping
-            //if (jumping)
-            //{
-            //    Jump(gameTime);
-            //}
 
             // Handle moving
             if (Accelerating)
@@ -303,9 +293,7 @@ namespace Havoc
             if (TakingKnockBack)
             {
                 TakeKnockBack(gameTime);
-                //CounterKnockBack(gameTime);
             }
-
 
             // Respawn player if off screen
             if (Image.Position.Y >= ScreenManager.Instance.Dimensions.Y)
@@ -349,6 +337,7 @@ namespace Havoc
                     attacking = false;
                 }
             }
+
 
             // Position the hitbox relative to player's image source rectangle
             if (facingRight)
@@ -673,7 +662,10 @@ namespace Havoc
                 }
 
                 if (!jumping)
+                {
                     Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                    
+                }
             } 
         }
 
