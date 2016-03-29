@@ -34,11 +34,13 @@ namespace Havoc
         public float MoveSpeedInAir;  // Speed the player can move while in air
         public float Gravity;  // Strength of Gravity
         public float JumpVelocity; // Jump strength
+        public Vector2 AnalogMovement; // The 2d strength of the analog stick
         int jumpsLeft; // Number of jumps player has left
 
         public Dictionary<string, Animation> Animations; // Contains the different player animations
         public Animation CurrentAnimation; // The current player animation
         public int NumberOfAnimations;  // Number of different animations for player
+        public int Outfit; // The outfit the player uses, (skin)
 
         public HitBox HitBox; // The hitbox of the player
         public bool TakingKnockBack; // If taking a knockback force
@@ -70,6 +72,8 @@ namespace Havoc
         {
             Image = new Image();
             Velocity = Vector2.Zero;
+
+            Outfit = 1;
             
             inAir = false;
             Gravity = 37.0f;
@@ -116,6 +120,10 @@ namespace Havoc
 
         public virtual void Update(GameTime gameTime)
         {
+            if (PlayerID == 0)
+                MoveSpeed = 8;
+
+
             Image.IsActive = true;
 
             // Resest the hitbox
@@ -374,7 +382,7 @@ namespace Havoc
 
         public void Jump()
         {
-            Velocity.Y = -JumpVelocity;
+            Velocity.Y = -JumpVelocity ;
         }
 
         /*
@@ -384,9 +392,9 @@ namespace Havoc
         public void Accelerate(GameTime gameTime)
         {
             if (facingRight)
-                Velocity.X += AccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Velocity.X += (AccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             else
-                Velocity.X -= AccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Velocity.X -= (AccelerateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
         }
 
         /*
@@ -489,7 +497,8 @@ namespace Havoc
         */////////////////////////////////////////                                       
         public void HandleInput(GameTime gameTime)
         {
-            if (PlayerID == 1)
+            // PlayerID 1 is for keyboard
+            if (PlayerID == 0)
             {
                 if (InputManager.Instance.KeyDown(Keys.D))
                 {
@@ -500,6 +509,7 @@ namespace Havoc
                     MoveLeftInput(gameTime);
                     
                 }
+                
                 else
                 {
                     NoMovementInput(gameTime);
@@ -515,10 +525,41 @@ namespace Havoc
                 {
                     JabInput();
                 }
+            }
+
+            // GamePad Inputs
+            else 
+            {
+                // Move left with stick
+                if (InputManager.Instance.getLeftAnalog(PlayerID).X < -0.1f)
+                {
+                    AnalogMovement = InputManager.Instance.getLeftAnalog(PlayerID);
+                    MoveLeftInput(gameTime);
+                }
+                // Move right with stick
+                else if (InputManager.Instance.getLeftAnalog(PlayerID).X > 0.1f)
+                {
+                    AnalogMovement = InputManager.Instance.getLeftAnalog(PlayerID);
+                    MoveRightInput(gameTime);
+                }
+                else
+                {
+                    AnalogMovement = Vector2.Zero;
+                    NoMovementInput(gameTime);
+                }
+
+                if (InputManager.Instance.ButtonPressed(PlayerID, Buttons.Y))
+                {
+                    JumpInput();
+                }
+
+                if (InputManager.Instance.ButtonPressed(PlayerID, Buttons.A))
+                {
+                    JabInput();
+                }
+
 
             }
-           
-            
         }
 
         public void NoMovementInput(GameTime gameTime)
@@ -532,7 +573,6 @@ namespace Havoc
                     Deccelerating = true;
                     
                 }
-                
             }
             Accelerating = false;
         }
@@ -545,20 +585,24 @@ namespace Havoc
                 if (!facingRight)
                     Deccelerating = true;
 
-                facingRight = true;
+                // Flip character horizontally if not in the air
+                if (!inAir)
+                    facingRight = true;
 
                 // If not blocked on the right
                 if (!blockedHorizontalRight)
                 {
                     if (inAir)
                     {
-                        Velocity.X = MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Velocity.X = MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds * AnalogMovement.X;
+                        // Keyboard
+                        if (PlayerID == 0)
+                            Velocity.X = MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
                         Accelerating = false;
                     }
                     else
                     {
-                        //Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                        
+                        // If done accelerating, set speed to MoveSpeed
                         if ((Velocity.X >= MoveSpeed))
                         {
                             Velocity.X = MoveSpeed;
@@ -567,12 +611,13 @@ namespace Havoc
                         else
                         {
                             Accelerating = true;
+                            if (PlayerID != 0)
+                                Velocity.X = MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds * AnalogMovement.X;
                         }
                        
                     }
-
                 }
-                else
+                else // Blocked on right, inhibit movement
                     Velocity.X = 0;
                
                 if (!jumping)
@@ -588,18 +633,25 @@ namespace Havoc
                 if (facingRight)
                     Deccelerating = true;
 
-                facingRight = false;
+                // Flip player horizontally if not in the air
+                if (!inAir)
+                    facingRight = false;
 
+                // Not blocked on the left, so player can move
                 if (!blockedHorizontalLeft)
                 {
                     if (inAir)
                     {
-                        Velocity.X = -MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        Velocity.X = -MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds * -AnalogMovement.X;
+                        // Keyboard
+                        if (PlayerID == 0)
+                            Velocity.X = -MoveSpeedInAir * (float)gameTime.ElapsedGameTime.TotalSeconds;
                         Accelerating = false;
                     }
                     else
                     {
-                        //Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        
+                        // If done accelerating, set speed to MoveSpeed
                         if ((Velocity.X <= -MoveSpeed))
                         {
                             Velocity.X = -MoveSpeed;
@@ -608,12 +660,14 @@ namespace Havoc
                         else
                         {
                             Accelerating = true;
+                            if (PlayerID != 0)
+                                Velocity.X = -MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds * -AnalogMovement.X;
                         }
 
                     }
 
                 }
-                else // Blocked on left
+                else // Blocked on left, inhibit movement
                 {
                     Velocity.X = 0;
                 }
@@ -625,8 +679,8 @@ namespace Havoc
 
         public void JumpInput()
         {
-            // If player has jumps left
-            if (jumpsLeft > 0)
+            // If player has jumps left and not attacking
+            if (jumpsLeft > 0 && !attacking)
             {
                 Jump();
                 Image.SpriteSheetEffect.SetAnimation(Animations["jump"]);

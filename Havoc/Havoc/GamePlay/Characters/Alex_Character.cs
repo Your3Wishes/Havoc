@@ -17,14 +17,17 @@ namespace Havoc
         public override void LoadContent()
         {
           
-            MoveSpeed = 8;
-            AccelerateSpeed = 46.5f;
+            MoveSpeed = 450;
+            AccelerateSpeed = 34.5f;
             DeccelerateSpeed = 125.5f;
             MoveSpeedInAir = 270;
 
             JumpVelocity = 12.7f;
             Image.Effects = "SpriteSheetEffect";
-            Image.Path = "GamePlay/Characters/Ryu";
+            if (Outfit == 1)
+                Image.Path = "GamePlay/Characters/Ryu";
+            else if (Outfit == 2)
+                Image.Path = "GamePlay/Characters/RyuEvil";
 
             LoadAnimations();
             base.LoadContent();

@@ -23,10 +23,11 @@ namespace Havoc
             //XmlManager<Player> playerLoader = new XmlManager<Player>();
             //player = playerLoader.Load("Load/GamePlay/Player.xml");
             player1 = new Alex_Character();
-            player1.PlayerID = 1;
+            player1.PlayerID = 0;
             player1.LoadContent();
 
             player2 = new Alex_Character();
+            player2.Outfit = 2;
             player2.PlayerID = 2;
             player2.LoadContent();
 

@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Graphic Managers\Animation.cs" />
     <Compile Include="GamePlay\Characters\Alex_Character.cs" />
-    <Compile Include="GamePlayScreen.cs" />
+    <Compile Include="GamePlay\GamePlayScreen.cs" />
     <Compile Include="GamePlay\Levels\Test_Level.cs" />
     <Compile Include="Graphic Managers\ImageEffects\BackgroundPanEffect.cs" />
     <Compile Include="Graphic Managers\Camera2D.cs" />
