@@ -79,11 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
-    <Content Include="Load\GamePlay\Player.xml" />
-    <Content Include="Load\Menus\TitleMenu.xml" />
-    <Content Include="Load\ScreenManager.xml" />
-    <Content Include="Load\GamePlayScreen.xml" />
-    <Content Include="Load\SplashScreen.xml" />
+    <Content Include="Load\Menus\TitleMenu.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />

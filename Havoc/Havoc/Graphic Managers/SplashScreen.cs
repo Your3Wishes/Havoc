@@ -20,6 +20,11 @@ namespace Havoc
         public override void LoadContent()
         {
             base.LoadContent();
+            Image = new Image();
+            Image.Path = "SplashScreen/image";
+            Image.Effects = "FadeEffect";
+            Image.IsActive = false;
+            Image.Alpha = 0.5f;
             Image.LoadContent();
             // Set Image to center of screen
             Image.Position = new Vector2((ScreenManager.Instance.Dimensions.X -

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Characters/Alex.png</SourceFile>
-  <SourceTime>2016-02-27T18:01:23-08:00</SourceTime>
-  <DestFile>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/bin/Windows/GamePlay/Characters/Alex.xnb</DestFile>
-  <DestTime>2016-03-29T09:32:05.9252934-07:00</DestTime>
+  <SourceFile>D:/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Characters/Alex.png</SourceFile>
+  <SourceTime>2016-03-11T13:03:15.6163611-06:00</SourceTime>
+  <DestFile>D:/GitHub/Havoc/Havoc/Havoc/Content/bin/Windows/GamePlay/Characters/Alex.xnb</DestFile>
+  <DestTime>2016-03-29T23:36:26.8118567-05:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2015-04-29T10:14:44-07:00</ImporterTime>
+  <ImporterTime>2015-04-29T12:14:44-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2015-04-29T10:14:44-07:00</ProcessorTime>
+  <ProcessorTime>2015-04-29T12:14:44-05:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

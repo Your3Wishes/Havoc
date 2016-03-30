@@ -20,10 +20,8 @@ namespace Havoc
         {
             base.LoadContent();
 
-            //XmlManager<Player> playerLoader = new XmlManager<Player>();
-            //player = playerLoader.Load("Load/GamePlay/Player.xml");
             player1 = new Alex_Character();
-            player1.PlayerID = 0;
+            player1.PlayerID = 1;
             player1.LoadContent();
 
             player2 = new Alex_Character();
@@ -33,7 +31,6 @@ namespace Havoc
 
             level = new Test_Level();
             level.LoadContent();
-
         }
 
         public override void UnloadContent()
@@ -78,7 +75,6 @@ namespace Havoc
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            //background.Draw(spriteBatch);
             level.Draw(spriteBatch);
 
             foreach (Platform platform in level.platforms)
@@ -87,7 +83,6 @@ namespace Havoc
             player1.Draw(spriteBatch);
             player2.Draw(spriteBatch);
         }
-
 
         /*
             Returns the point in between the players

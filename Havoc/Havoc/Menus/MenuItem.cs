@@ -10,6 +10,5 @@ namespace Havoc
         public string LinkType;
         public string LinkID;
         public Image Image;
-
     }
 }

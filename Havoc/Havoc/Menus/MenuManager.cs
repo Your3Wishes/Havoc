@@ -16,6 +16,7 @@ namespace Havoc
     public class MenuManager
     {
         Menu menu;
+        Type newMenu;
         bool isTransitioning;
 
 
@@ -57,6 +58,7 @@ namespace Havoc
             XmlManager<Menu> xmlMenuManager = new XmlManager<Menu>();
             menu.UnLoadContent();
           
+            // Load the new menu
             menu = xmlMenuManager.Load(menu.ID);
             menu.LoadContent();
             menu.OnMenuChange += menu_OnMenuChange;
@@ -68,7 +70,6 @@ namespace Havoc
                 item.Image.ActivateEffect("FadeEffect");
             }
         }
-
 
         public void LoadContent(string menuPath)
         {

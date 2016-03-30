@@ -46,7 +46,6 @@ namespace Havoc
         public bool TakingKnockBack; // If taking a knockback force
         public Vector2 KnockBackVelocity; // KnockBack strength
         public float KnockBackAntiVelocity;  // Counteracts horizonal knockback forces
-        public int KnockBackCounter;  // For calculating knockback anti horizonal force
         public int Health; // The higher the number, the harder hits player takes
 
         public bool HitStun; // The player is in hitstun (can't move)
@@ -176,7 +175,6 @@ namespace Havoc
                         jumping = false;
                         jumpsLeft = 2;
                         TakingKnockBack = false;
-                        KnockBackCounter = 0;
                         Velocity.X = 0;
                         TakeXKnockBack = false;
 
@@ -192,13 +190,11 @@ namespace Havoc
                 {
                     Velocity.X = 0;
                     blockedHorizontalRight = true;
-                    blockedHorizontalLeft = false;
                 }
                 // Collided with the right size of the object. Block on left
                 else if  (Image.Position.X + 10 > gameObject.Image.Position.X + gameObject.Image.SourceRect.Width)
                 {
                     Velocity.X = 0;
-                    blockedHorizontalRight = false;
                     blockedHorizontalLeft = true;
                 }
 
@@ -211,14 +207,10 @@ namespace Havoc
                     {
                         Velocity.Y = 0;
                         jumping = false;
-                        KnockBackCounter = 0;
                         TakingKnockBack = false;
                         inAir = true;
                     }
-                    
-                    
                 }
-
             }
             else
             {
@@ -298,7 +290,6 @@ namespace Havoc
                 Image.Position.Y = 0;
                 Image.Position.X = ScreenManager.Instance.Dimensions.X / 2;
                 Velocity = Vector2.Zero;
-                KnockBackCounter = 0;
                 Health = 0;
             }
 
@@ -426,9 +417,7 @@ namespace Havoc
                 Image.SpriteSheetEffect.CurrentFrame.X = Image.SpriteSheetEffect.CurrentAnimation.StartFrame.X;
             TakeXKnockBack = true;
             Health += (int)hitBox.Damage;
-            KnockBackCounter = 0;
             KnockBackVelocity.Y = Health * hitBox.KnockBack.Y;
-
 
             // Decide if horizontal force is to the left or right
             if (Image.Position.X < player.Image.Position.X)
@@ -443,8 +432,6 @@ namespace Havoc
 
         public void TakeKnockBack(GameTime gameTime)
         {
-            //Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.Y * 0.1f);
-            
             if (TakeXKnockBack)
             {
                 
@@ -456,7 +443,6 @@ namespace Havoc
                     if (Velocity.X < 0)
                     {
                         Velocity.X = 0;
-                        KnockBackCounter = 0;
                         KnockBackVelocity.X = 0;
                         TakeXKnockBack = false;
                     }
@@ -468,7 +454,6 @@ namespace Havoc
                     if (Velocity.X > 0)
                     {
                         Velocity.X = 0;
-                        KnockBackCounter = 0;
                         KnockBackVelocity.X = 0;
                         TakeXKnockBack = false;
                     }
@@ -483,7 +468,7 @@ namespace Havoc
         */////////////////////////////////////////                                       
         public void HandleInput(GameTime gameTime)
         {
-            // PlayerID 1 is for keyboard
+            // PlayerID 0 is for keyboard
             if (PlayerID == 0)
             {
                 if (InputManager.Instance.KeyDown(Keys.D))
@@ -495,7 +480,6 @@ namespace Havoc
                     MoveLeftInput(gameTime);
                     
                 }
-                
                 else
                 {
                     NoMovementInput(gameTime);
@@ -504,7 +488,6 @@ namespace Havoc
                 if (InputManager.Instance.KeyPressed(Keys.Space))
                 {
                     JumpInput();
-
                 }
 
                 if (InputManager.Instance.KeyPressed(Keys.F))
@@ -514,8 +497,8 @@ namespace Havoc
             }
 
             // GamePad Inputs
-            else 
-            {
+            else
+            { 
                 // Move left with stick
                 if (InputManager.Instance.getLeftAnalog(PlayerID).X < -0.1f)
                 {
@@ -557,7 +540,6 @@ namespace Havoc
                 if (!inAir)
                 {
                     Deccelerating = true;
-                    
                 }
             }
             Accelerating = false;

@@ -43,8 +43,7 @@ namespace Havoc
             {
                 if (instance == null)
                 {
-                    XmlManager<ScreenManager> xml = new XmlManager<ScreenManager>();
-                    instance = xml.Load("Load/ScreenManager.xml");
+                    instance = new ScreenManager();
                  }
                
                 return instance;
@@ -57,11 +56,7 @@ namespace Havoc
         private ScreenManager()
         {
             Dimensions = new Vector2(1920, 1080);
-            
-            currentScreen = new GamePlayScreen();
-            xmlGameScreenManager = new XmlManager<GameScreen>();
-            xmlGameScreenManager.Type = currentScreen.Type;
-            currentScreen = xmlGameScreenManager.Load("Load/GamePlayScreen.xml");
+            currentScreen = new SplashScreen();
         }
 
         /*
@@ -92,11 +87,11 @@ namespace Havoc
                 {
                     currentScreen.UnloadContent();
                     currentScreen = newScreen;
-                    xmlGameScreenManager.Type = currentScreen.Type;
-                    if (File.Exists(currentScreen.XmlPath))
-                    {
-                        currentScreen = xmlGameScreenManager.Load(currentScreen.XmlPath);
-                    }
+                    //xmlGameScreenManager.Type = currentScreen.Type;
+                    //if (File.Exists(currentScreen.XmlPath))
+                    //{
+                    //    currentScreen = xmlGameScreenManager.Load(currentScreen.XmlPath);
+                    //}
 
                     currentScreen.LoadContent();
                 }
@@ -113,6 +108,10 @@ namespace Havoc
         public void LoadContent(ContentManager Content)
         {
             this.Content = new ContentManager(Content.ServiceProvider, "Content");
+            Image = new Image();
+            Image.Path = "ScreenManager/FadeImage";
+            Image.Effects = "FadeEffect";
+            Image.Scale = new Vector2(640, 480);
             currentScreen.LoadContent();
             Image.LoadContent();
         }

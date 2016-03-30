@@ -28,7 +28,7 @@ namespace Havoc
         {
             Type = this.GetType();
             // Loads specific GameScreen xmlPath; e.g. Load/SplashScreen.xml
-            XmlPath = "Load/" + Type.ToString().Replace("Havoc.", "") + ".xml";
+            //XmlPath = "Load/" + Type.ToString().Replace("Havoc.", "") + ".xml";
         }
 
         public virtual void LoadContent()
