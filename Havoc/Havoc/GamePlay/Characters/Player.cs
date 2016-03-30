@@ -56,7 +56,6 @@ namespace Havoc
         public bool TakeXKnockBack; // True if taking horizontal knockback
   
 
-
         bool facingRight; // True if player is facing to the right
         bool attacking; // True if player is attacking
         bool inAir;
@@ -175,19 +174,17 @@ namespace Havoc
                         inAir = false;  // Player isn't in the air
                         // Reset jumps
                         jumping = false;
+                        jumpsLeft = 2;
                         TakingKnockBack = false;
                         KnockBackCounter = 0;
                         Velocity.X = 0;
                         TakeXKnockBack = false;
-                        jumpsLeft = 2;
 
                     }
                     else // Besides the platform
                     {
                         inAir = true;
-                        //Velocity.X = 0;
                     }
-
                 }
 
                 // Collided with the left side of the object. Blocked on right
@@ -250,7 +247,6 @@ namespace Havoc
             // Player was hit!
             if (playerRect.Intersects(hitBox.Rectangle))
             {
-                //CanBeComboed = false;
                 if (CanBeComboed)
                 {
                     TakeHit(hitBox, player);
@@ -293,6 +289,7 @@ namespace Havoc
             if (TakingKnockBack)
             {
                 TakeKnockBack(gameTime);
+                Image.SpriteSheetEffect.SetAnimation(Animations["stun"]);
             }
 
             // Respawn player if off screen
@@ -309,12 +306,6 @@ namespace Havoc
             if (Velocity.X == 0 && Velocity.Y == 0 && !attacking)
             {
                 Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
-            }
-
-            // If player is tacking knockback, play knock back animation
-            if (TakingKnockBack)
-            {
-                Image.SpriteSheetEffect.SetAnimation(Animations["stun"]);
             }
 
             if (attacking)
@@ -338,17 +329,18 @@ namespace Havoc
                 }
             }
 
-
-            // Position the hitbox relative to player's image source rectangle
+            // Handle player direction
             if (facingRight)
             {
                 Image.SpriteEffect = SpriteEffects.None;
+                // Position hitboxes relative to player's source rectangle
                 HitBox.Rectangle.X += (int)Image.Position.X;
                 HitBox.Rectangle.Y += (int)Image.Position.Y;
             }
             else // Facing left
             {
                 Image.SpriteEffect = SpriteEffects.FlipHorizontally;
+                // Position hitboxes relative to player's source rectangle
                 HitBox.Rectangle.X = ((int)Image.Position.X + Image.SourceRect.Width) - HitBox.Rectangle.X - HitBox.Rectangle.Width;
                 HitBox.Rectangle.Y += (int)Image.Position.Y;
             }
@@ -363,12 +355,17 @@ namespace Havoc
 
         }
 
+        /*
+            Gravity force applied to Y Velocity
+        */
         public void Fall(GameTime gameTime)
         {
             Velocity.Y += Gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-
+        /*
+            Applies an upward Y Velocity
+        */
         public void Jump()
         {
             Velocity.Y = -JumpVelocity ;

@@ -38,7 +38,7 @@ namespace Havoc
         */
         public void LoadAnimations()
         {
-            // Animations
+            // Set Animation Data
             Animations["idle"].StartFrame = new Vector2(0, 0);
             Animations["idle"].NumberOfFrames = 4;
             Animations["idle"].NumberOfTotalFrames = 10;

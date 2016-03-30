@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>D:/GitHub/Havoc/Havoc/Havoc/Content/Fonts/Orbitron.spritefont</SourceFile>
-  <SourceTime>2016-03-11T13:03:15.6123574-06:00</SourceTime>
-  <DestFile>D:/GitHub/Havoc/Havoc/Havoc/Content/bin/Windows/Fonts/Orbitron.xnb</DestFile>
-  <DestTime>2016-03-28T15:23:04.0562822-05:00</DestTime>
+  <SourceFile>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/Fonts/Orbitron.spritefont</SourceFile>
+  <SourceTime>2015-01-19T16:24:04-08:00</SourceTime>
+  <DestFile>C:/Users/Your3Wishes/Documents/GitHub/Havoc/Havoc/Havoc/Content/bin/Windows/Fonts/Orbitron.xnb</DestFile>
+  <DestTime>2016-03-29T09:32:01.1170108-07:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
-  <ImporterTime>2015-04-29T12:14:44-05:00</ImporterTime>
+  <ImporterTime>2015-04-29T10:14:44-07:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>
-  <ProcessorTime>2015-04-29T12:14:44-05:00</ProcessorTime>
+  <ProcessorTime>2015-04-29T10:14:44-07:00</ProcessorTime>
   <Parameters>
     <Key>TextureFormat</Key>
     <Value>Compressed</Value>
