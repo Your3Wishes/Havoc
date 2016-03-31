@@ -20,15 +20,15 @@ namespace Havoc
         public override void LoadContent()
         {
             base.LoadContent();
-            Image = new Image();
+            Image = new Image(screenManager);
             Image.Path = "SplashScreen/image";
             Image.Effects = "FadeEffect";
             Image.IsActive = false;
             Image.Alpha = 0.5f;
             Image.LoadContent();
             // Set Image to center of screen
-            Image.Position = new Vector2((ScreenManager.Instance.Dimensions.X -
-                       Image.SourceRect.Width) / 2, (ScreenManager.Instance.Dimensions.Y -
+            Image.Position = new Vector2((screenManager.Dimensions.X -
+                       Image.SourceRect.Width) / 2, (screenManager.Dimensions.Y -
                        Image.SourceRect.Height) / 2);
         }
 
@@ -43,8 +43,8 @@ namespace Havoc
             base.Update(gameTime);
             Image.Update(gameTime);
 
-            if (InputManager.Instance.KeyPressed(Keys.Enter, Keys.Z))
-                ScreenManager.Instance.ChangeScreens("TitleScreen");
+            if (inputManager.KeyPressed(Keys.Enter, Keys.Z))
+                screenManager.ChangeScreens("TitleScreen");
         }
 
         public override void Draw(SpriteBatch spriteBatch)

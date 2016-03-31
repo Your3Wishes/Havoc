@@ -16,7 +16,7 @@ namespace Havoc
 {
     public class Image
     {
-
+        protected ScreenManager screenManager;
         public float Alpha;
         public string Text, FontName, Path;
         public Vector2 Position, Scale;
@@ -47,7 +47,7 @@ namespace Havoc
         void SetEffect<T>(ref T effect)
         {
             if (effect == null)
-                effect = (T)Activator.CreateInstance(typeof(T));
+                effect = (T)Activator.CreateInstance(typeof(T), screenManager);
             else
             {
                 (effect as ImageEffect).IsActive = true;
@@ -113,8 +113,9 @@ namespace Havoc
         /*
             Default constructor
         */
-        public Image()
+        public Image(ScreenManager screenManagerReference)
         {
+            screenManager = screenManagerReference;
             Path = Effects = Text = String.Empty;
             FontName = "Fonts/Orbitron";
             Position = Vector2.Zero;
@@ -132,7 +133,7 @@ namespace Havoc
         public void LoadContent()
         {
             content = new ContentManager(
-                ScreenManager.Instance.Content.ServiceProvider, "Content");
+                screenManager.Content.ServiceProvider, "Content");
 
             // Load texture
             if (Path != String.Empty)
@@ -159,19 +160,19 @@ namespace Havoc
                 SourceRect = new Rectangle(0, 0, (int)dimensions.X, (int)dimensions.Y);
 
 
-            renderTarget = new RenderTarget2D(ScreenManager.Instance.GraphicsDevice,
+            renderTarget = new RenderTarget2D(screenManager.GraphicsDevice,
                 (int)dimensions.X, (int)dimensions.Y);
-            ScreenManager.Instance.GraphicsDevice.SetRenderTarget(renderTarget);
-            ScreenManager.Instance.GraphicsDevice.Clear(Color.Transparent);
-            ScreenManager.Instance.SpriteBatch.Begin();
+            screenManager.GraphicsDevice.SetRenderTarget(renderTarget);
+            screenManager.GraphicsDevice.Clear(Color.Transparent);
+            screenManager.SpriteBatch.Begin();
             if (Texture != null)
-                ScreenManager.Instance.SpriteBatch.Draw(Texture, Vector2.Zero, Color.White);
-            ScreenManager.Instance.SpriteBatch.DrawString(font, Text, Vector2.Zero, Color.White);
-            ScreenManager.Instance.SpriteBatch.End();
+                screenManager.SpriteBatch.Draw(Texture, Vector2.Zero, Color.White);
+            screenManager.SpriteBatch.DrawString(font, Text, Vector2.Zero, Color.White);
+            screenManager.SpriteBatch.End();
 
             Texture = renderTarget;
 
-            ScreenManager.Instance.GraphicsDevice.SetRenderTarget(null);
+            screenManager.GraphicsDevice.SetRenderTarget(null);
 
             SetEffect<FadeEffect>(ref FadeEffect);
             SetEffect<SpriteSheetEffect>(ref SpriteSheetEffect);

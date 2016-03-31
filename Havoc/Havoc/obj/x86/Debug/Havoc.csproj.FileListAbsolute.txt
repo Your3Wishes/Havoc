@@ -150,7 +150,6 @@ C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\SharpDX.Direct3D9.xml
 C:\Users\Your3Wishes\Documents\GitHub\Havoc\Havoc\Havoc\Content\GamePlay\Characters\Ryu.xnb
 D:\GitHub\Havoc\Havoc\Havoc\obj\x86\Debug\Havoc.exe
 D:\GitHub\Havoc\Havoc\Havoc\obj\x86\Debug\Havoc.pdb
-D:\GitHub\Havoc\Havoc\Havoc\obj\x86\Debug\Havoc.csprojResolveAssemblyReference.cache
 D:\GitHub\Havoc\Havoc\Havoc\Havoc.exe
 D:\GitHub\Havoc\Havoc\Havoc\Havoc.pdb
 D:\GitHub\Havoc\Havoc\Havoc\MonoGame.Framework.dll
@@ -186,3 +185,10 @@ D:\GitHub\Havoc\Havoc\Havoc\Content\Levels\Level1\Mountains.xnb
 D:\GitHub\Havoc\Havoc\Havoc\Content\Levels\Level1\Sky.xnb
 D:\GitHub\Havoc\Havoc\Havoc\Content\Levels\StaticObjects\MetalPlatform.xnb
 D:\GitHub\Havoc\Havoc\Havoc\Content\SplashScreen\image.xnb
+D:\GitHub\Havoc\Havoc\Havoc\obj\x86\Debug\Havoc.exe.manifest
+D:\GitHub\Havoc\Havoc\Havoc\obj\x86\Debug\Havoc.application
+D:\GitHub\Havoc\Havoc\Havoc\Havoc.exe.manifest
+D:\GitHub\Havoc\Havoc\Havoc\Havoc.application
+D:\GitHub\Havoc\Havoc\Havoc\Content\GamePlay\Characters\ryuEvil.xnb
+D:\GitHub\Havoc\Havoc\Havoc\Content\ScreenManager\FadeImage.xnb
+D:\GitHub\Havoc\Havoc\Havoc\obj\x86\Debug\Havoc.csprojResolveAssemblyReference.cache

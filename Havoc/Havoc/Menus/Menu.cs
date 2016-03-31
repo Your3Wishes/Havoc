@@ -18,7 +18,8 @@ namespace Havoc
     public class Menu
     {
         public event EventHandler OnMenuChange;
-
+        ScreenManager screenManager;
+        InputManager inputManager;
 
         public string Axis;
         public string Effects;
@@ -55,8 +56,10 @@ namespace Havoc
             }
         }
 
-        public Menu()
+        public Menu(ScreenManager screenManagerReference, InputManager inputManagerReference)
         {
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
             id = String.Empty;
             itemNumber = 0;
             Effects = String.Empty;
@@ -76,16 +79,16 @@ namespace Havoc
                     item.Image.SourceRect.Height);
             }
 
-            dimensions = new Vector2((ScreenManager.Instance.Dimensions.X -
-                dimensions.X) / 2, (ScreenManager.Instance.Dimensions.Y - dimensions.Y) / 2);
+            dimensions = new Vector2((screenManager.Dimensions.X -
+                dimensions.X) / 2, (screenManager.Dimensions.Y - dimensions.Y) / 2);
 
             foreach(MenuItem item in Items)
             {
                 if (Axis == "X")
                     item.Image.Position = new Vector2(dimensions.X, 
-                        (ScreenManager.Instance.Dimensions.Y - item.Image.SourceRect.Height) / 2);
+                        (screenManager.Dimensions.Y - item.Image.SourceRect.Height) / 2);
                 else if (Axis == "Y")
-                    item.Image.Position = new Vector2((ScreenManager.Instance.Dimensions.X -
+                    item.Image.Position = new Vector2((screenManager.Dimensions.X -
                         item.Image.SourceRect.Width) / 2, dimensions.Y);
 
                 dimensions += new Vector2(item.Image.SourceRect.Width,
@@ -126,17 +129,17 @@ namespace Havoc
             // Horizontal Menu
             if (Axis == "X")
             {
-                if (InputManager.Instance.KeyPressed(Keys.Right))
+                if (inputManager.KeyPressed(Keys.Right))
                     itemNumber++;
-                else if (InputManager.Instance.KeyPressed(Keys.Left))
+                else if (inputManager.KeyPressed(Keys.Left))
                     itemNumber--;
             }
             // Vertical Menu
             else if (Axis == "Y")
             {
-                if (InputManager.Instance.KeyPressed(Keys.Down))
+                if (inputManager.KeyPressed(Keys.Down))
                     itemNumber++;
-                else if (InputManager.Instance.KeyPressed(Keys.Up))
+                else if (inputManager.KeyPressed(Keys.Up))
                     itemNumber--;
             }
 

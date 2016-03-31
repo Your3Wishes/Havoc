@@ -15,18 +15,20 @@ namespace Havoc
     public class Platform
     {
         public Image Image;
+        ScreenManager screenManager;
 
-        public Platform()
+        public Platform(ScreenManager screenManagerReference)
         {
-            Image = new Image();
+            screenManager = screenManagerReference;
+            Image = new Image(screenManager);
         }
 
 
         public void LoadContent()
         {
             Image.LoadContent();
-            Image.Position.X = ScreenManager.Instance.Dimensions.X / 2 - (Image.SourceRect.Width / 2);
-            Image.Position.Y = ScreenManager.Instance.Dimensions.Y - 450;
+            Image.Position.X = screenManager.Dimensions.X / 2 - (Image.SourceRect.Width / 2);
+            Image.Position.Y = screenManager.Dimensions.Y - 450;
         }
 
         public void UnloadContent()

@@ -17,6 +17,13 @@ namespace Havoc
 
         public float PanSpeed;
 
+        public BackgroundPanEffect(ScreenManager screenManagerReference)
+            : base(screenManagerReference) 
+        {
+            PanSpeed = -0.35f;
+        }
+
+
         public BackgroundPanEffect()
         {
             PanSpeed = -0.35f;

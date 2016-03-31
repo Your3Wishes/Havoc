@@ -16,20 +16,26 @@ namespace Havoc
         Player player2;
         Level level;
 
+        public GamePlayScreen(ScreenManager screenManagerReference, InputManager inputManagerReference)
+        {
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
+        }
+
         public override void LoadContent()
         {
             base.LoadContent();
 
-            player1 = new Alex_Character();
+            player1 = new Alex_Character(screenManager, inputManager);
             player1.PlayerID = 0;
             player1.LoadContent();
 
-            player2 = new Alex_Character();
+            player2 = new Alex_Character(screenManager, inputManager);
             player2.Outfit = 2;
             player2.PlayerID = 1;
             player2.LoadContent();
 
-            level = new Test_Level();
+            level = new Test_Level(screenManager);
             level.LoadContent();
         }
 

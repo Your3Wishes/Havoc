@@ -13,11 +13,17 @@ namespace Havoc
     {
         public List<Platform> platforms;
         public List<Image> backGroundImages;
+        protected ScreenManager screenManager;
+
+        public Level(ScreenManager screenManagerReference)
+        {
+            screenManager = screenManagerReference;
+            platforms = new List<Platform>();
+            backGroundImages = new List<Image>();
+        }
 
         public Level()
         {
-            platforms = new List<Platform>();
-            backGroundImages = new List<Image>();
         }
         
 

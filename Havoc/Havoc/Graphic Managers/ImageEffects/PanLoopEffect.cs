@@ -14,6 +14,8 @@ namespace Havoc
 {
     public class PanLoopEffect : ImageEffect
     {
+        public PanLoopEffect(ScreenManager screenManagerReference)
+            : base(screenManagerReference) { }
 
         public float PanSpeed;
 
@@ -40,7 +42,7 @@ namespace Havoc
             {
 
                 // If image goes off-screen, reset it
-                if (image.Position.X  > ScreenManager.Instance.Dimensions.X + 300)
+                if (image.Position.X  > screenManager.Dimensions.X + 300)
                     image.Position.X = 0 - image.SourceRect.Width;
 
                 // Pan image

@@ -15,20 +15,26 @@ namespace Havoc
 {
     public class InputManager
     {
+        ScreenManager screenManager;
         KeyboardState currentKeyState, prevKeyState;
         GamePadState currentGamePad1State, prevGamePad1State, currentGamePad2State, prevGamePad2State;
         GamePadCapabilities capabilities1, capabilities2;
 
-        private static InputManager instance;
+        //private static InputManager instance;
 
-        public static InputManager Instance
+        //public static InputManager Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //            instance = new InputManager();
+        //        return instance;
+        //    }
+        //}
+
+        public InputManager(ScreenManager screenManagerReference)
         {
-            get
-            {
-                if (instance == null)
-                    instance = new InputManager();
-                return instance;
-            }
+            screenManager = screenManagerReference;
         }
 
         /*
@@ -45,7 +51,8 @@ namespace Havoc
             prevKeyState = currentKeyState;
             prevGamePad1State = currentGamePad1State;
             prevGamePad2State = currentGamePad2State;
-            if (!ScreenManager.Instance.IsTransitioning)
+
+            if (!screenManager.IsTransitioning)
             {
                 currentKeyState = Keyboard.GetState();
                 if (capabilities1.IsConnected)

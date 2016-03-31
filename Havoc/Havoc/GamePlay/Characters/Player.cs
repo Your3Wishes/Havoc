@@ -20,10 +20,10 @@ namespace Havoc
     public class Player
     {
         private bool DEBUG_HIT_BOX = false; // USED FOR DEBUGGING HITBOXES
-        /*///////////////////////////////////////*
-         * START OF DATAMEMBERS *
-        */////////////////////////////////////////   
 
+        ScreenManager screenManager;
+        InputManager inputManager;
+      
         // Public data members.
         public int PlayerID { get; set; } // Identifies who is Player1, Player2, etc...
         public Image Image { get; set; } // Holds image of player. Include position, effects, etc...
@@ -45,29 +45,28 @@ namespace Havoc
         private int jumpsLeft; // Number of jumps player has left
         private int Health; // The higher the number, the harder hits player takes
         private Vector2 KnockBackVelocity; // KnockBack strength
-        private Vector2 AnalogMovement; // The 2d strength of the analog stick
+        private Vector2 AnalogMovement; // The 2d coords of the analog stick
         private float KnockBackAntiVelocity;  // Counteracts horizonal knockback forces
         private float ComboCounter; // Used to recharge CanBeComboed
         private float ComboMaxTimer; // When ComboCounter reaches this number, player can be comboed again
-        private bool Accelerating; // If accelerating movement
-        private bool Deccelerating; // If deccelerating movement
+        private bool Accelerating; 
+        private bool Deccelerating; 
         private bool HitStun; // The player is in hitstun (can't move)
         private bool CanBeComboed; // False right after being hit
-        private bool attacking; // True if player is attacking
+        private bool attacking; 
         private bool inAir;
         private bool jumping;
-        private bool facingRight; // True if player is facing to the right
+        private bool facingRight; 
         private bool blockedHorizontalRight;
         private bool blockedHorizontalLeft;
-        private bool TakingKnockBack; // If taking a knockback force
+        private bool TakingKnockBack; 
         private bool TakeXKnockBack; // True if taking horizontal knockback
-        /*///////////////////////////////////////*
-         * END OF DATAMEMBERS *
-        */////////////////////////////////////////   
 
-        public Player()
+        public Player(ScreenManager screenManagerReference, InputManager inputManagerReference)
         {
-            Image = new Image();
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
+            Image = new Image(screenManager);
             Outfit = 1;
             Velocity = Vector2.Zero;
             KnockBackVelocity = Vector2.Zero;
@@ -97,10 +96,14 @@ namespace Havoc
             Animations.Add("stun", new Animation());
         }
 
+        public Player()
+        {
+        }
+
         public virtual void LoadContent()
         {
             Image.LoadContent();
-            Image.Position.X = (ScreenManager.Instance.Dimensions.X / 2) - 100; // Set initial player position
+            Image.Position.X = (screenManager.Dimensions.X / 2) - 100; // Set initial player position
             Image.SpriteSheetEffect.NumberOfAnimations = NumberOfAnimations; // Tell SpriteSheet how many different animations
             Image.SpriteSheetEffect.SetAnimation(Animations["idle"]); // Set animation to idle
         }
@@ -276,10 +279,10 @@ namespace Havoc
             }
 
             // Respawn player if off screen
-            if (Image.Position.Y >= ScreenManager.Instance.Dimensions.Y)
+            if (Image.Position.Y >= screenManager.Dimensions.Y)
             {
                 Image.Position.Y = 0;
-                Image.Position.X = ScreenManager.Instance.Dimensions.X / 2;
+                Image.Position.X = screenManager.Dimensions.X / 2;
                 Velocity = Vector2.Zero;
                 Health = 0;
             }
@@ -462,11 +465,11 @@ namespace Havoc
             // PlayerID 0 is for keyboard
             if (PlayerID == 0)
             {
-                if (InputManager.Instance.KeyDown(Keys.D))
+                if (inputManager.KeyDown(Keys.D))
                 {
                     MoveRightInput(gameTime);   
                 }
-                else if (InputManager.Instance.KeyDown(Keys.A))
+                else if (inputManager.KeyDown(Keys.A))
                 {
                     MoveLeftInput(gameTime);
                     
@@ -476,12 +479,12 @@ namespace Havoc
                     NoMovementInput(gameTime);
                 }
 
-                if (InputManager.Instance.KeyPressed(Keys.Space))
+                if (inputManager.KeyPressed(Keys.Space))
                 {
                     JumpInput();
                 }
 
-                if (InputManager.Instance.KeyPressed(Keys.F))
+                if (inputManager.KeyPressed(Keys.F))
                 {
                     JabInput();
                 }
@@ -491,16 +494,16 @@ namespace Havoc
             else
             { 
                 // Move left with stick
-                if (InputManager.Instance.getLeftAnalog(PlayerID).X < -0.1f)
+                if (inputManager.getLeftAnalog(PlayerID).X < -0.1f)
                 {
-                    AnalogMovement = InputManager.Instance.getLeftAnalog(PlayerID);
+                    AnalogMovement = inputManager.getLeftAnalog(PlayerID);
                     Console.WriteLine("test");
                     MoveLeftInput(gameTime);
                 }
                 // Move right with stick
-                else if (InputManager.Instance.getLeftAnalog(PlayerID).X > 0.1f)
+                else if (inputManager.getLeftAnalog(PlayerID).X > 0.1f)
                 {
-                    AnalogMovement = InputManager.Instance.getLeftAnalog(PlayerID);
+                    AnalogMovement = inputManager.getLeftAnalog(PlayerID);
                     MoveRightInput(gameTime);
                 }
                 else
@@ -509,12 +512,12 @@ namespace Havoc
                     NoMovementInput(gameTime);
                 }
 
-                if (InputManager.Instance.ButtonPressed(PlayerID, Buttons.Y))
+                if (inputManager.ButtonPressed(PlayerID, Buttons.Y))
                 {
                     JumpInput();
                 }
 
-                if (InputManager.Instance.ButtonPressed(PlayerID, Buttons.A))
+                if (inputManager.ButtonPressed(PlayerID, Buttons.A))
                 {
                     JabInput();
                 }
@@ -674,7 +677,7 @@ namespace Havoc
         */
         private void DrawRectangle(Rectangle coords, Color color, SpriteBatch spriteBatch)
         {
-            var rect = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
+            var rect = new Texture2D(screenManager.GraphicsDevice, 1, 1);
             rect.SetData(new[] { color });
             spriteBatch.Draw(rect, coords, color);
         }

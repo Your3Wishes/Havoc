@@ -14,6 +14,13 @@ namespace Havoc
         public float FadeSpeed;
         public bool Increase;
 
+        public FadeEffect(ScreenManager screenManagerReference)
+            : base(screenManagerReference) 
+        {
+            FadeSpeed = 1;
+            Increase = false;
+        }
+
         public FadeEffect()
         {
             FadeSpeed = 1;

@@ -9,12 +9,18 @@ namespace Havoc
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        ScreenManager screenManager;
+        InputManager inputManager;
 
         Vector2 virtualScreen = new Vector2(1920, 1080);
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            screenManager = new ScreenManager();
+            inputManager = new InputManager(screenManager);
+            screenManager.InputManager = inputManager;
+            screenManager.InitializeScreen();
             Content.RootDirectory = "Content";
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1920, 1080);
@@ -35,25 +41,25 @@ namespace Havoc
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ScreenManager.Instance.GraphicsDevice = GraphicsDevice;
-            ScreenManager.Instance.SpriteBatch = spriteBatch;
-            ScreenManager.Instance.LoadContent(Content);
+            screenManager.GraphicsDevice = GraphicsDevice;
+            screenManager.SpriteBatch = spriteBatch;
+            screenManager.LoadContent(Content);
 
         }
 
         
         protected override void UnloadContent()
         {
-            ScreenManager.Instance.UnloadContent();
+            screenManager.UnloadContent();
         }
 
        
         protected override void Update(GameTime gameTime)
         {
-            if (InputManager.Instance.KeyDown(Keys.P))
+            if (inputManager.KeyDown(Keys.P))
                 Exit();
 
-            ScreenManager.Instance.Update(gameTime);
+            screenManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -65,7 +71,7 @@ namespace Havoc
 
             Resolution.BeginDraw();
             spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Camera2D.GetViewMatrix() * Resolution.getTransformationMatrix());
-            ScreenManager.Instance.Draw(spriteBatch);
+            screenManager.Draw(spriteBatch);
             spriteBatch.End();
            
             base.Draw(gameTime);

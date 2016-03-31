@@ -22,6 +22,10 @@ namespace Havoc
         public Animation CurrentAnimation; // The current animation to cycle through
         public bool Animate; // Should the animation animate
 
+        public SpriteSheetEffect(ScreenManager screenManagerReference)
+            : base(screenManagerReference) { }
+        
+
         public int FrameWidth
         {
             get
@@ -48,7 +52,6 @@ namespace Havoc
             FrameCounter = 0;
             Animate = true;
         }
-
 
         public override void LoadContent(ref Image image)
         {

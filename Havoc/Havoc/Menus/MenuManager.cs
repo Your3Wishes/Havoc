@@ -15,8 +15,9 @@ namespace Havoc
 {
     public class MenuManager
     {
+        ScreenManager screenManager;
+        InputManager inputManager;
         Menu menu;
-        Type newMenu;
         bool isTransitioning;
 
 
@@ -28,7 +29,7 @@ namespace Havoc
             if (isTransitioning)
             {
                 
-                for (int i = 0; i< menu.Items.Count; i++)
+                for (int i = 0; i < menu.Items.Count; i++)
                 {
                     menu.Items[i].Image.Update(gameTime);
                     float first = menu.Items[0].Image.Alpha;
@@ -46,9 +47,11 @@ namespace Havoc
         }
 
 
-        public MenuManager()
+        public MenuManager(ScreenManager screenManagerReference, InputManager inputManagerReference)
         {
-            menu = new Menu();
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
+            menu = new Menu(screenManager, inputManagerReference);
             menu.OnMenuChange += menu_OnMenuChange;
         }
 
@@ -86,11 +89,11 @@ namespace Havoc
         {
             if (!isTransitioning)
                 menu.Update(gameTime);
-            if (InputManager.Instance.KeyPressed(Keys.Enter) && !isTransitioning)
+            if (inputManager.KeyPressed(Keys.Enter) && !isTransitioning)
             {
                 
                 if (menu.Items[menu.ItemNumber].LinkType == "Screen")
-                    ScreenManager.Instance.ChangeScreens(
+                    screenManager.ChangeScreens(
                         menu.Items[menu.ItemNumber].LinkID);
                 else
                 {

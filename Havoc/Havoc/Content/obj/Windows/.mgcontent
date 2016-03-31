@@ -14,5 +14,7 @@
     <File>D:/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Player.png</File>
     <File>D:/GitHub/Havoc/Havoc/Havoc/Content/SplashScreen/image.png</File>
     <File>D:/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Characters/Ryu.png</File>
+    <File>D:/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Characters/ryuEvil.png</File>
+    <File>D:/GitHub/Havoc/Havoc/Havoc/Content/ScreenManager/FadeImage.png</File>
   </SourceFiles>
 </SourceFileCollection>

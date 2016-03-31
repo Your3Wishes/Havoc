@@ -19,7 +19,8 @@ namespace Havoc
 {
     public class ScreenManager
     {
-        private static ScreenManager instance;
+        //private static ScreenManager instance;
+        public InputManager InputManager { get; set; }
         public Vector2 Dimensions { private set; get; }
         public ContentManager Content { private set; get; }
         
@@ -29,27 +30,41 @@ namespace Havoc
         public Image Image;
         public bool IsTransitioning { get; private set; }
 
-        // The single ScreenManager instance
-        public static ScreenManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ScreenManager();
-                 }
+        //// The single ScreenManager instance
+        //public static ScreenManager Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            instance = new ScreenManager();
+        //         }
                
-                return instance;
-            }
+        //        return instance;
+        //    }
+        //}
+
+        public ScreenManager(InputManager inputManagerReference)
+        {
+            InputManager = inputManagerReference;
+            Dimensions = new Vector2(1920, 1080);
+            currentScreen = new GamePlayScreen(this, InputManager);
         }
+        
+
 
         /*
             Default constructor
         */
-        private ScreenManager()
+        public ScreenManager()
         {
             Dimensions = new Vector2(1920, 1080);
-            currentScreen = new GamePlayScreen();
+            
+        }
+
+        public void InitializeScreen()
+        {
+            currentScreen = new GamePlayScreen(this, InputManager);
         }
 
         /*
@@ -101,7 +116,7 @@ namespace Havoc
         public void LoadContent(ContentManager Content)
         {
             this.Content = new ContentManager(Content.ServiceProvider, "Content");
-            Image = new Image();
+            Image = new Image(this);
             Image.Path = "ScreenManager/FadeImage";
             Image.Effects = "FadeEffect";
             Image.Scale = new Vector2(640, 480);

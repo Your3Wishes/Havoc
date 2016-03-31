@@ -15,6 +15,12 @@ namespace Havoc
     public class Alex_Character : Player
     {
 
+        public Alex_Character(ScreenManager screenManagerReference, InputManager inputManagerReference)
+            : base(screenManagerReference, inputManagerReference)
+        {
+        }
+        
+
         public override void LoadContent()
         {
           
@@ -45,12 +51,10 @@ namespace Havoc
             Animations["idle"].NumberOfTotalFrames = 10;
             Animations["idle"].Speed = 170;
 
-
             Animations["walk"].StartFrame = new Vector2(0, 1);
             Animations["walk"].NumberOfFrames = 5;
             Animations["walk"].NumberOfTotalFrames = 10;
             Animations["walk"].Speed = 100;
-
 
             Animations["jump"].StartFrame = new Vector2(0, 2);
             Animations["jump"].NumberOfFrames = 5;
@@ -85,7 +89,6 @@ namespace Havoc
             NumberOfAnimations = 5;
         }
 
-    
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);

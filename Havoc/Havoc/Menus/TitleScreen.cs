@@ -14,7 +14,7 @@ namespace Havoc
 
         public TitleScreen()
         {
-            menuManager = new MenuManager();
+            menuManager = new MenuManager(screenManager, inputManager);
         }
 
 
