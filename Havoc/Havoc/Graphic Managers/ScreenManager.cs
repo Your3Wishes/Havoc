@@ -20,20 +20,13 @@ namespace Havoc
     public class ScreenManager
     {
         private static ScreenManager instance;
-        [XmlIgnore]
         public Vector2 Dimensions { private set; get; }
-        [XmlIgnore]
         public ContentManager Content { private set; get; }
-        XmlManager<GameScreen> xmlGameScreenManager;
-
+        
         GameScreen currentScreen, newScreen;
-        [XmlIgnore]
         public GraphicsDevice GraphicsDevice;
-        [XmlIgnore]
         public SpriteBatch SpriteBatch;
-
         public Image Image;
-        [XmlIgnore]
         public bool IsTransitioning { get; private set; }
 
         // The single ScreenManager instance
@@ -56,7 +49,7 @@ namespace Havoc
         private ScreenManager()
         {
             Dimensions = new Vector2(1920, 1080);
-            currentScreen = new SplashScreen();
+            currentScreen = new GamePlayScreen();
         }
 
         /*

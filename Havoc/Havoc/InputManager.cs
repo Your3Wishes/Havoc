@@ -124,7 +124,7 @@ namespace Havoc
         {
             if (id == 1)
                 return currentGamePad1State.ThumbSticks.Left;
-            else if (id == 2)
+            if (id == 2)
                 return currentGamePad2State.ThumbSticks.Left;
             else return Vector2.Zero;
         }

@@ -19,49 +19,48 @@ namespace Havoc
 {
     public class Player
     {
+        private bool DEBUG_HIT_BOX = false; // USED FOR DEBUGGING HITBOXES
         /*///////////////////////////////////////*
          * START OF DATAMEMBERS *
         */////////////////////////////////////////   
-        public bool DEBUG_HIT_BOX = false; // USED FOR DEBUGGING HITBOXES
-        public int PlayerID; // Identifies who is Player1, Player2, etc...
-        public Image Image; // Holds image of player. Include position, effects, etc...
-        public Vector2 Velocity; // Current speed of player
-        public float MoveSpeed; // Max Speed the player can move
-        public bool Accelerating; // If accelerating movement
-        public float AccelerateSpeed; // Speed the player accelerates (movement)
-        public bool Deccelerating; // If deccelerating movement
-        public float DeccelerateSpeed; // Speed the player deccelerates (movement)
-        public float MoveSpeedInAir;  // Speed the player can move while in air
-        public float Gravity;  // Strength of Gravity
-        public float JumpVelocity; // Jump strength
-        public Vector2 AnalogMovement; // The 2d strength of the analog stick
-        int jumpsLeft; // Number of jumps player has left
 
-        public Dictionary<string, Animation> Animations; // Contains the different player animations
-        public Animation CurrentAnimation; // The current player animation
-        public int NumberOfAnimations;  // Number of different animations for player
-        public int Outfit; // The outfit the player uses, (skin)
+        // Public data members.
+        public int PlayerID { get; set; } // Identifies who is Player1, Player2, etc...
+        public Image Image { get; set; } // Holds image of player. Include position, effects, etc...
+        public int Outfit { get; set; } // The outfit the player uses, (skin)
+        public HitBox HitBox { get; set; } // The hitbox of the player
 
-        public HitBox HitBox; // The hitbox of the player
-        public bool TakingKnockBack; // If taking a knockback force
-        public Vector2 KnockBackVelocity; // KnockBack strength
-        public float KnockBackAntiVelocity;  // Counteracts horizonal knockback forces
-        public int Health; // The higher the number, the harder hits player takes
+        // Protected data members.
+        protected float AccelerateSpeed; // Speed the player accelerates (movement)
+        protected float MoveSpeed; // Max Speed the player can move
+        protected Dictionary<string, Animation> Animations; // Contains the different player animations
+        protected float DeccelerateSpeed; // Speed the player deccelerates (movement)
+        protected float MoveSpeedInAir;  // Speed the player can move while in air
+        protected float Gravity;  // Strength of Gravity
+        protected float JumpVelocity; // Jump strength
+        protected int NumberOfAnimations;  // Number of different animations for player
 
-        public bool HitStun; // The player is in hitstun (can't move)
-        public bool CanBeComboed; // False right after being hit
-        public float ComboCounter; // Used to recharge CanBeComboed
-        public float ComboMaxTimer; // When ComboCounter reaches this number, player can be comboed again
-        public bool TakeXKnockBack; // True if taking horizontal knockback
-  
-
-        bool facingRight; // True if player is facing to the right
-        bool attacking; // True if player is attacking
-        bool inAir;
-       
-        bool jumping;
-        bool blockedHorizontalRight;
-        bool blockedHorizontalLeft;
+        // Private data members
+        private Vector2 Velocity; // Current speed of player
+        private int jumpsLeft; // Number of jumps player has left
+        private int Health; // The higher the number, the harder hits player takes
+        private Vector2 KnockBackVelocity; // KnockBack strength
+        private Vector2 AnalogMovement; // The 2d strength of the analog stick
+        private float KnockBackAntiVelocity;  // Counteracts horizonal knockback forces
+        private float ComboCounter; // Used to recharge CanBeComboed
+        private float ComboMaxTimer; // When ComboCounter reaches this number, player can be comboed again
+        private bool Accelerating; // If accelerating movement
+        private bool Deccelerating; // If deccelerating movement
+        private bool HitStun; // The player is in hitstun (can't move)
+        private bool CanBeComboed; // False right after being hit
+        private bool attacking; // True if player is attacking
+        private bool inAir;
+        private bool jumping;
+        private bool facingRight; // True if player is facing to the right
+        private bool blockedHorizontalRight;
+        private bool blockedHorizontalLeft;
+        private bool TakingKnockBack; // If taking a knockback force
+        private bool TakeXKnockBack; // True if taking horizontal knockback
         /*///////////////////////////////////////*
          * END OF DATAMEMBERS *
         */////////////////////////////////////////   
@@ -69,38 +68,33 @@ namespace Havoc
         public Player()
         {
             Image = new Image();
-            Velocity = Vector2.Zero;
-
             Outfit = 1;
-            
-            inAir = false;
+            Velocity = Vector2.Zero;
+            KnockBackVelocity = Vector2.Zero;
+            jumpsLeft = 2;
+            Health = 0;
             Gravity = 37.0f;
             KnockBackAntiVelocity = 0.68f;
-            jumping = false;
-            blockedHorizontalRight = false;
-            blockedHorizontalLeft = false;
-            jumpsLeft = 2;
             facingRight = true;
             NumberOfAnimations = 0;
-
             HitBox = new HitBox();
             HitStun = false;
             CanBeComboed = true;
             ComboCounter = 0;
             ComboMaxTimer = 600.0f;
-            Health = 0;
+            jumping = false;
+            inAir = false;
+            blockedHorizontalLeft = false;
+            blockedHorizontalRight = false;
             TakingKnockBack = false;
-            KnockBackVelocity = Vector2.Zero;
 
             // Animations
             Animations = new Dictionary<string, Animation>();
-
             Animations.Add("idle", new Animation());
             Animations.Add("walk", new Animation());
             Animations.Add("jump", new Animation());
             Animations.Add("kick", new Animation());
             Animations.Add("stun", new Animation());
-
         }
 
         public virtual void LoadContent()
@@ -121,13 +115,11 @@ namespace Havoc
             if (PlayerID == 0)
                 MoveSpeed = 8;
 
-
             Image.IsActive = true;
 
             // Resest the hitbox
             HitBox.Rectangle = new Rectangle();
 
-            // Handle Input
             HandleInput(gameTime);
 
             HandleLogic(gameTime);
@@ -141,7 +133,6 @@ namespace Havoc
             Image.Draw(spriteBatch);
             if (DEBUG_HIT_BOX)
                 DrawRectangle(HitBox.Rectangle, Color.Aquamarine, spriteBatch);
-           
         }
 
 
@@ -503,6 +494,7 @@ namespace Havoc
                 if (InputManager.Instance.getLeftAnalog(PlayerID).X < -0.1f)
                 {
                     AnalogMovement = InputManager.Instance.getLeftAnalog(PlayerID);
+                    Console.WriteLine("test");
                     MoveLeftInput(gameTime);
                 }
                 // Move right with stick
@@ -535,7 +527,6 @@ namespace Havoc
         {
             if (!TakingKnockBack)
             {
-                //Velocity.X = 0;
                 // Deccelerate
                 if (!inAir)
                 {
