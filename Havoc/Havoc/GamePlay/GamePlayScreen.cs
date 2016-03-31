@@ -72,9 +72,9 @@ namespace Havoc
             
             // Update Camera
             // Point camera to new pan location
-            Camera2D.PointCameraTo(GetCenterOfPlayers(player1, player2) - Camera2D.Origin); // For panning camera
-            Camera2D.UpdateZoomOnPlayers(player1, player2);
-            Camera2D.Update(gameTime);
+            Camera2D.Instance.PointCameraTo(GetCenterOfPlayers(player1, player2) - Camera2D.Instance.Origin); // For panning camera
+            Camera2D.Instance.UpdateZoomOnPlayers(player1, player2);
+            Camera2D.Instance.Update(gameTime);
 
         }
 

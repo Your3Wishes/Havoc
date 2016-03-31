@@ -9,30 +9,46 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Havoc
 {
-    public static class Camera2D
+    public class Camera2D
     {
-        static public Viewport viewport;
+        private static Camera2D instance;
+        public Viewport viewport;
 
-        static public Vector2 Position = Vector2.Zero;
-        static public Vector2 DestinationPosition = Vector2.Zero;
-        static public float Rotation = 0;
-        static public float Zoom = 1.55f;
-        static public float NewZoom = 1.55f;
-        static public float MaxZoomOut = 1.5f;
-        static public float MinZoomIn = 2.3f;
-        static public float ZoomFactor = 603.75f;
-        static public float ZoomSpeed = 0.00005f;
+        public Vector2 Position = Vector2.Zero;
+        public Vector2 DestinationPosition = Vector2.Zero;
+        public float Rotation = 0;
+        public float Zoom = 1.55f;
+        public float NewZoom = 1.55f;
+        public float MaxZoomOut = 1.5f;
+        public float MinZoomIn = 2.3f;
+        public float ZoomFactor = 603.75f;
+        public float ZoomSpeed = 0.00005f;
 
-        static public Vector2 Origin;
-        static public float PanSpeed = 0.4f;
-        static public float AbsXDistance = 0.0f;
-        static public float PanSlope = 0.0f;
-        static public bool PanLeft = false;
-        static public bool PanRight = false;
-        static public bool UndefinedSlope = false;
-        
+        public Vector2 Origin;
+        public float PanSpeed = 0.4f;
+        public float AbsXDistance = 0.0f;
+        public float PanSlope = 0.0f;
+        public bool PanLeft = false;
+        public bool PanRight = false;
+        public bool UndefinedSlope = false;
 
-        static public Matrix GetViewMatrix()
+        private Camera2D() { }
+
+        public static Camera2D Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Camera2D();
+                }
+
+                return instance;
+            }
+        }
+
+
+        public Matrix GetViewMatrix()
         {
             return
                 Matrix.CreateTranslation(new Vector3(-Position, 0.0f)) *
@@ -43,7 +59,7 @@ namespace Havoc
         }
 
 
-        static public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             PanCamera(gameTime);
             PanZoom(gameTime);
@@ -52,7 +68,7 @@ namespace Havoc
        /*
             Set the destinationPoint to pan the camera to
        */
-       static public void PointCameraTo(Vector2 position)
+        public void PointCameraTo(Vector2 position)
         {
             
             DestinationPosition = position;
@@ -65,7 +81,7 @@ namespace Havoc
             Calculate the line between the position and destination position
             and move the current position along that line
         */
-        static public void PanCamera(GameTime gameTime)
+        public void PanCamera(GameTime gameTime)
         {
 
 
@@ -143,7 +159,7 @@ namespace Havoc
         /*
             Pan the Zoom from Camera's current zoom to newZoom
         */
-        static public void PanZoom(GameTime gameTime)
+        public void PanZoom(GameTime gameTime)
         {
             // If NewZoom is different enough to PanZoom
             if (Math.Abs(Zoom - NewZoom) > 0.045f)
@@ -164,7 +180,7 @@ namespace Havoc
         /*
             Returns the slope between two points
         */
-        static public float GetSlope(Vector2 sourcePosition, Vector2 destPosition)
+        public float GetSlope(Vector2 sourcePosition, Vector2 destPosition)
         {
             // Undefined slope
             if (destPosition.X - sourcePosition.X == 0)
@@ -183,7 +199,7 @@ namespace Havoc
         /*
             Returns the distance between two points
         */
-        static public float GetDistance(Vector2 sourcePosition, Vector2 destPosition)
+        public float GetDistance(Vector2 sourcePosition, Vector2 destPosition)
         {
             return (float)Math.Sqrt(Math.Pow(destPosition.X - sourcePosition.X, 2) + Math.Pow(destPosition.Y - sourcePosition.Y, 2));
         }
@@ -192,7 +208,7 @@ namespace Havoc
             Handles updating the current zoom, based on players distance
             from each other
         */
-        static public void UpdateZoomOnPlayers(Player player1, Player player2)
+        public void UpdateZoomOnPlayers(Player player1, Player player2)
         {
             float distance = GetDistance(player1.Image.Position, player2.Image.Position);
             float newZoom = ZoomFactor / distance;

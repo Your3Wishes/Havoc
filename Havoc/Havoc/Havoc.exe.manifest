@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Havoc.exe" size="187360">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Havoc.exe" size="187872">
       <assemblyIdentity name="Havoc" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>QBorG9AflHKV50aa3WiL2Cz2+U4=</dsig:DigestValue>
+        <dsig:DigestValue>+9Q25n5Q0sUQmvjIfsSs2qjU8qQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

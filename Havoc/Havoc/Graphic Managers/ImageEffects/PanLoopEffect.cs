@@ -14,10 +14,14 @@ namespace Havoc
 {
     public class PanLoopEffect : ImageEffect
     {
-        public PanLoopEffect(ScreenManager screenManagerReference)
-            : base(screenManagerReference) { }
-
         public float PanSpeed;
+
+        public PanLoopEffect(ScreenManager screenManagerReference)
+            : base(screenManagerReference)
+        {
+            PanSpeed = 50.0f;
+        }
+
 
         public PanLoopEffect()
         {

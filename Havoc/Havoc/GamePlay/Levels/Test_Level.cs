@@ -32,8 +32,6 @@ namespace Havoc
             backGroundImages[2].Effects = "BackgroundPanEffect";
 
 
-
-
             // Add platform
             platforms.Add(new Platform(screenManager));
             platforms[0].Image.Path = "Levels/StaticObjects/MetalPlatform";
@@ -52,9 +50,6 @@ namespace Havoc
             // Set background in correct location
             backGroundImages[0].Position.X = (screenManager.Dimensions.X / 2) - (backGroundImages[0].Texture.Width / 2);
             backGroundImages[0].Position.Y = (screenManager.Dimensions.Y / 2) - (backGroundImages[0].Texture.Height / 2);
-
-
-            Console.WriteLine("Yo");
 
 
             // Set cloud 1 in correct location

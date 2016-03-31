@@ -47,14 +47,14 @@ namespace Havoc
             {
 
                 // If camera is panning left, move image to the right
-                if (Camera2D.PanLeft)
+                if (Camera2D.Instance.PanLeft)
                 {
-                    image.Position.X += PanSpeed * Camera2D.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100.0f;
+                    image.Position.X += PanSpeed * Camera2D.Instance.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100.0f;
                 }
                 // If camera is panning right, move image to the left
-                else if (Camera2D.PanRight) 
+                else if (Camera2D.Instance.PanRight) 
                 {
-                    image.Position.X -= PanSpeed * Camera2D.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100.0f;
+                    image.Position.X -= PanSpeed * Camera2D.Instance.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100.0f;
                 }
             }
         }

@@ -24,9 +24,9 @@ namespace Havoc
             Content.RootDirectory = "Content";
             Resolution.Init(ref graphics);
             Resolution.SetVirtualResolution(1920, 1080);
-            Resolution.SetResolution(1280, 720, false);
+            Resolution.SetResolution(1280, 720, true);
 
-            Camera2D.Origin = new Vector2(1920 / 2, 1080 / 2);
+            Camera2D.Instance.Origin = new Vector2(1920 / 2, 1080 / 2);
         }
 
         
@@ -70,7 +70,7 @@ namespace Havoc
             GraphicsDevice.Clear(Color.Black);
 
             Resolution.BeginDraw();
-            spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Camera2D.GetViewMatrix() * Resolution.getTransformationMatrix());
+            spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Camera2D.Instance.GetViewMatrix() * Resolution.getTransformationMatrix());
             screenManager.Draw(spriteBatch);
             spriteBatch.End();
            
