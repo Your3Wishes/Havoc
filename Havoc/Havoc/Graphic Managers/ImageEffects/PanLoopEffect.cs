@@ -14,8 +14,8 @@ namespace Havoc
 {
     public class PanLoopEffect : ImageEffect
     {
-        public float PanSpeed;
-
+        public float PanSpeed { get; set; }
+        
         public PanLoopEffect(ScreenManager screenManagerReference)
             : base(screenManagerReference)
         {
@@ -44,13 +44,12 @@ namespace Havoc
 
             if (image.IsActive)
             {
-
                 // If image goes off-screen, reset it
-                if (image.Position.X  > screenManager.Dimensions.X + 300)
-                    image.Position.X = 0 - image.SourceRect.Width;
+                if (image.getPosition().X  > screenManager.Dimensions.X + 300)
+                    image.setPositionX(0 - image.SourceRect.Width);
 
                 // Pan image
-                image.Position.X += PanSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                image.setPositionX(image.getPosition().X + PanSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             }
         }

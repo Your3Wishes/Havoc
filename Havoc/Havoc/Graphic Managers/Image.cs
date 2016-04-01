@@ -17,28 +17,26 @@ namespace Havoc
     public class Image
     {
         protected ScreenManager screenManager;
-        public float Alpha;
-        public string Text, FontName, Path;
-        public Vector2 Position, Scale;
-        public Rectangle SourceRect;
-        public bool IsActive;
-        public Vector2 Origin;
-        public SpriteEffects SpriteEffect;
-
-        [XmlIgnore]
-        public Texture2D Texture;
+        public float Alpha { get; set; }
+        private string Text, FontName;
+        public string Path { get; set; }
+        public Vector2 Scale { get; set; }
+        public Rectangle SourceRect { get; set; }
+        public bool IsActive { get; set; }
+        public SpriteEffects SpriteEffect { get; set; }
+        public string Effects { get; set; }
+        public Texture2D Texture { get; set; }
         
-        ContentManager content;
-        RenderTarget2D renderTarget;
-        SpriteFont font;
-        Dictionary<string, ImageEffect> effectList;
-        public string Effects;
-
-        public FadeEffect FadeEffect;
-        public SpriteSheetEffect SpriteSheetEffect;
-        public BackgroundPanEffect BackgroundPanEffect;
-        public PanLoopEffect PanLoopEffect;
-
+        private Vector2 Position;
+        private Vector2 Origin;
+        private ContentManager content;
+        private RenderTarget2D renderTarget;
+        private SpriteFont font;
+        private Dictionary<string, ImageEffect> effectList;
+        private FadeEffect FadeEffect;
+        private SpriteSheetEffect SpriteSheetEffect;
+        private BackgroundPanEffect BackgroundPanEffect;
+        private PanLoopEffect PanLoopEffect;
 
         /*
             Adds an effect to image. 'T effect' assumed to be 
@@ -109,10 +107,6 @@ namespace Havoc
 
         }
 
-
-        /*
-            Default constructor
-        */
         public Image(ScreenManager screenManagerReference)
         {
             screenManager = screenManagerReference;
@@ -228,6 +222,47 @@ namespace Havoc
         {
             Origin = new Vector2(SourceRect.Width / 2, SourceRect.Height / 2);
             spriteBatch.Draw(Texture, Position + Origin, SourceRect, Color.White * Alpha, 0.0f, Origin, Scale, SpriteEffect, 0.0f);
+        }
+
+        // Public Properties
+        public Vector2 getPosition()
+        {
+            return Position;
+        }
+
+        public void setPositionY(float y)
+        {
+            Position.Y = y;
+        }
+
+        public void setPositionX(float x)
+        {
+            Position.X = x;
+        }
+
+        public void setPosition(Vector2 Position)
+        {
+            this.Position = Position;
+        }
+
+        public FadeEffect getFadeEffect()
+        {
+            return FadeEffect;
+        }
+
+        public SpriteSheetEffect getSpriteSheetEffect()
+        {
+            return SpriteSheetEffect;
+        }
+
+        public BackgroundPanEffect getBackgroundPanEffect()
+        {
+            return BackgroundPanEffect;
+        }
+
+        public PanLoopEffect getPanLoopEffect()
+        {
+            return PanLoopEffect;
         }
 
 

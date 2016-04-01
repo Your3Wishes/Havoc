@@ -210,7 +210,7 @@ namespace Havoc
         */
         public void UpdateZoomOnPlayers(Player player1, Player player2)
         {
-            float distance = GetDistance(player1.Image.Position, player2.Image.Position);
+            float distance = GetDistance(player1.Image.getPosition(), player2.Image.getPosition());
             float newZoom = ZoomFactor / distance;
 
             if (newZoom > MaxZoomOut && newZoom < MinZoomIn)

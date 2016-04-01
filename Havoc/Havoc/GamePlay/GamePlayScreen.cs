@@ -12,9 +12,9 @@ namespace Havoc
     public class GamePlayScreen : GameScreen
     {
 
-        Player player1;
-        Player player2;
-        Level level;
+        private Player player1;
+        private Player player2;
+        private Level level;
 
         public GamePlayScreen(ScreenManager screenManagerReference, InputManager inputManagerReference)
         {
@@ -49,23 +49,20 @@ namespace Havoc
 
         public override void Update(GameTime gameTime)
         {
-
-            // Call all update methods
             base.Update(gameTime);
             player1.Update(gameTime);
             player2.Update(gameTime);
             level.Update(gameTime);
 
 
-            // Check for collisions on platforms
-            foreach(Platform platform in level.platforms)
+            // Check for collisions with platforms
+            foreach(Platform platform in level.Platforms)
             {
                 player1.CollisionCheck(platform);
                 player2.CollisionCheck(platform);
 
             }
 
-           
             // Check for collisions on player attacks
             player1.CollisionCheck(player2.HitBox, player2);
             player2.CollisionCheck(player1.HitBox, player1);
@@ -83,7 +80,7 @@ namespace Havoc
             base.Draw(spriteBatch);
             level.Draw(spriteBatch);
 
-            foreach (Platform platform in level.platforms)
+            foreach (Platform platform in level.Platforms)
                 platform.Draw(spriteBatch);
 
             player1.Draw(spriteBatch);
@@ -97,10 +94,9 @@ namespace Havoc
         public Vector2 GetCenterOfPlayers(Player player1, Player player2)
         {
             Vector2 midPoint = new Vector2();
-            midPoint.X = (player1.Image.Position.X + player2.Image.Position.X) / 2;
-            midPoint.Y = (player1.Image.Position.Y + player2.Image.Position.Y) / 2;
-            midPoint.Y += 50;
-
+            midPoint.X = (player1.Image.getPosition().X + player2.Image.getPosition().X) / 2;
+            midPoint.Y = (player1.Image.getPosition().Y + player2.Image.getPosition().Y) / 2;
+      
             return midPoint; 
         }
 

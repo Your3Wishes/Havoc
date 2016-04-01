@@ -77,7 +77,7 @@ namespace Havoc
             IsTransitioning = true;
 
             // Helps with fading transition
-            Image.FadeEffect.Increase = true;
+            Image.getFadeEffect().Increase = true;
             Image.Alpha = 0.0f;            
         }
 

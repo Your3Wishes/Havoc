@@ -19,19 +19,11 @@ namespace Havoc
         protected ScreenManager screenManager;
         protected InputManager inputManager;
         protected ContentManager content;
-        [XmlIgnore]
-        public Type Type;
-
-        public string XmlPath;
-
-
+        
         public GameScreen(ScreenManager screenManagerReference, InputManager inputManagerReference)
         {
             screenManager = screenManagerReference;
             inputManager = inputManagerReference;
-            Type = this.GetType();
-            // Loads specific GameScreen xmlPath; e.g. Load/SplashScreen.xml
-            //XmlPath = "Load/" + Type.ToString().Replace("Havoc.", "") + ".xml";
         }
 
         public GameScreen()

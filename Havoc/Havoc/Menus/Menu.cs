@@ -50,9 +50,9 @@ namespace Havoc
                 item.Image.IsActive = true;
                 item.Image.Alpha = alpha;
                 if (alpha == 0.0f)
-                    item.Image.FadeEffect.Increase = true;
+                    item.Image.getFadeEffect().Increase = true;
                 else
-                    item.Image.FadeEffect.Increase = false;
+                    item.Image.getFadeEffect().Increase = false;
             }
         }
 
@@ -85,11 +85,11 @@ namespace Havoc
             foreach(MenuItem item in Items)
             {
                 if (Axis == "X")
-                    item.Image.Position = new Vector2(dimensions.X, 
-                        (screenManager.Dimensions.Y - item.Image.SourceRect.Height) / 2);
+                    item.Image.setPosition(new Vector2(dimensions.X,
+                        (screenManager.Dimensions.Y - item.Image.SourceRect.Height) / 2));
                 else if (Axis == "Y")
-                    item.Image.Position = new Vector2((screenManager.Dimensions.X -
-                        item.Image.SourceRect.Width) / 2, dimensions.Y);
+                    item.Image.setPosition(new Vector2((screenManager.Dimensions.X -
+                        item.Image.SourceRect.Width) / 2, dimensions.Y));
 
                 dimensions += new Vector2(item.Image.SourceRect.Width,
                     item.Image.SourceRect.Height);

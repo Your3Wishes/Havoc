@@ -33,12 +33,12 @@ namespace Havoc
 
 
             // Add platform
-            platforms.Add(new Platform(screenManager));
-            platforms[0].Image.Path = "Levels/StaticObjects/MetalPlatform";
+            Platforms.Add(new Platform(screenManager));
+            Platforms[0].Image.Path = "Levels/StaticObjects/MetalPlatform";
            
 
             // Load Content
-            foreach (Platform platform in platforms)
+            foreach (Platform platform in Platforms)
             {
                 platform.LoadContent();
             }
@@ -48,21 +48,21 @@ namespace Havoc
             }
 
             // Set background in correct location
-            backGroundImages[0].Position.X = (screenManager.Dimensions.X / 2) - (backGroundImages[0].Texture.Width / 2);
-            backGroundImages[0].Position.Y = (screenManager.Dimensions.Y / 2) - (backGroundImages[0].Texture.Height / 2);
+            backGroundImages[0].setPositionX((screenManager.Dimensions.X / 2) - (backGroundImages[0].Texture.Width / 2));
+            backGroundImages[0].setPositionY((screenManager.Dimensions.Y / 2) - (backGroundImages[0].Texture.Height / 2));
 
 
             // Set cloud 1 in correct location
-            backGroundImages[1].Position.X = (screenManager.Dimensions.X / 2) - (backGroundImages[1].Texture.Width / 2);
-            backGroundImages[1].Position.Y = 200;
+            backGroundImages[1].setPositionX((screenManager.Dimensions.X / 2) - (backGroundImages[1].Texture.Width / 2));
+            backGroundImages[1].setPositionY(200);
 
             // Set mountains in correct location
-            backGroundImages[2].Position.X = (screenManager.Dimensions.X / 2) - (backGroundImages[2].Texture.Width / 2);
-            backGroundImages[2].Position.Y = 300;
+            backGroundImages[2].setPositionX((screenManager.Dimensions.X / 2) - (backGroundImages[2].Texture.Width / 2));
+            backGroundImages[2].setPositionY(300);
 
             // Set platform in correct location
-            platforms[0].Image.Position.X = screenManager.Dimensions.X / 2 - (platforms[0].Image.SourceRect.Width / 2);
-            platforms[0].Image.Position.Y = screenManager.Dimensions.Y - 450;
+            Platforms[0].Image.setPositionX((screenManager.Dimensions.X / 2) - (Platforms[0].Image.SourceRect.Width / 2));
+            Platforms[0].Image.setPositionY(screenManager.Dimensions.Y - 450);
 
         }
     }

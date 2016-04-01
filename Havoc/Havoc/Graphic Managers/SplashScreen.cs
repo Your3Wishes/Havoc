@@ -27,9 +27,9 @@ namespace Havoc
             Image.Alpha = 0.5f;
             Image.LoadContent();
             // Set Image to center of screen
-            Image.Position = new Vector2((screenManager.Dimensions.X -
+            Image.setPosition(new Vector2((screenManager.Dimensions.X -
                        Image.SourceRect.Width) / 2, (screenManager.Dimensions.Y -
-                       Image.SourceRect.Height) / 2);
+                       Image.SourceRect.Height) / 2));
         }
 
         public override void UnloadContent()
