@@ -11,15 +11,11 @@ using Microsoft.Xna.Framework.Content;
 
 
 // Manages all game screens. 
-// This is a singleton class (there is only one
-// ScreenManager class that can be accessed anywhere
-// in the program
 
 namespace Havoc
 {
     public class ScreenManager
     {
-        //private static ScreenManager instance;
         public InputManager InputManager { get; set; }
         public Vector2 Dimensions { private set; get; }
         public ContentManager Content { private set; get; }
@@ -30,19 +26,6 @@ namespace Havoc
         public Image Image;
         public bool IsTransitioning { get; private set; }
 
-        //// The single ScreenManager instance
-        //public static ScreenManager Instance
-        //{
-        //    get
-        //    {
-        //        if (instance == null)
-        //        {
-        //            instance = new ScreenManager();
-        //         }
-               
-        //        return instance;
-        //    }
-        //}
 
         public ScreenManager(InputManager inputManagerReference)
         {

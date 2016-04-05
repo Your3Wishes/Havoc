@@ -13,9 +13,7 @@ namespace Havoc
 {
     public class SplashScreen : GameScreen
     {
-        public Image Image;
-
-      
+        private Image Image;
 
         public override void LoadContent()
         {

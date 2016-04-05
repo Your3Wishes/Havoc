@@ -10,7 +10,7 @@ namespace Havoc
    public class HitBox
     {
         public Rectangle Rectangle;
-        public float Damage;
+        public float Damage { get; set; }
         public Vector2 KnockBack;
 
 

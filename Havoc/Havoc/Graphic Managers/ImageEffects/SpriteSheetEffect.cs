@@ -15,11 +15,16 @@ namespace Havoc
 {
     public class SpriteSheetEffect : ImageEffect
     {
+        // TODO: Fix player position when facing left on wide animations
+
         private Vector2 CurrentFrame;
         public int NumberOfAnimations { get; set; } // Total number of different animations in spritesheet
         public Animation CurrentAnimation { get; set; } // The current animation to cycle through
         public bool Animate { get; set; } // Should the animation animate
-        
+        public bool PlayerOffset; // If the player has been offset to fix left facing animations
+        public int PlayerBaseFrameWidth { get; set; } // The frame width of "idle" usually
+        public int PrevFrameWidth { get; set; } // Width of the previous animation's frames
+
         private int FrameCounter; // Counter for switching frames
         private int SwitchFrame; // When to switch to next frame
 
@@ -51,6 +56,7 @@ namespace Havoc
             SwitchFrame = 150;
             FrameCounter = 0;
             Animate = true;
+            PlayerOffset = false;
         }
 
         public override void LoadContent(ref Image image)
@@ -88,6 +94,7 @@ namespace Havoc
                             CurrentFrame.X = CurrentAnimation.StartFrame.X;
                     }
                 }
+
             }
             else
                 CurrentFrame.X = 1;
@@ -107,10 +114,16 @@ namespace Havoc
             if (this.CurrentAnimation != animation)
                 CurrentFrame.X = animation.StartFrame.X;
 
+            if (this.CurrentAnimation != null)
+                PrevFrameWidth = FrameWidth;
+
             this.CurrentAnimation = animation;
             CurrentFrame.Y = animation.StartFrame.Y;
             SwitchFrame = animation.Speed;
             Animate = true;
+
+
+
         }
 
         public void RestartAnimation(Animation animation)
@@ -122,6 +135,8 @@ namespace Havoc
         {
             return CurrentFrame;
         }
+
+        
 
 
 
