@@ -15,37 +15,10 @@ namespace Havoc
 {
     public class MenuManager
     {
-        ScreenManager screenManager;
-        InputManager inputManager;
-        Menu menu;
-        bool isTransitioning;
-
-
-        /*
-            Transitions from one menu to another menu
-        */
-        void Transition(GameTime gameTime)
-        {
-            if (isTransitioning)
-            {
-                
-                for (int i = 0; i < menu.Items.Count; i++)
-                {
-                    menu.Items[i].Image.Update(gameTime);
-                    float first = menu.Items[0].Image.Alpha;
-                    float last = menu.Items[menu.Items.Count - 1].Image.Alpha;
-                    if (first == 0.0f && last == 0.0f)
-                        menu.ID = menu.Items[menu.ItemNumber].LinkID;
-                    else if (first == 1.0f && last == 1.0f)
-                    {
-                        isTransitioning = false;
-                        foreach (MenuItem item in menu.Items)
-                            item.Image.RestoreEffects();
-                    }
-                }
-            }
-        }
-
+        private ScreenManager screenManager;
+        private InputManager inputManager;
+        private Menu menu;
+        private bool isTransitioning;
 
         public MenuManager(ScreenManager screenManagerReference, InputManager inputManagerReference)
         {
@@ -56,7 +29,7 @@ namespace Havoc
         }
 
 
-        void menu_OnMenuChange(object sender, EventArgs e)
+        private void menu_OnMenuChange(object sender, EventArgs e)
         {
             XmlManager<Menu> xmlMenuManager = new XmlManager<Menu>();
             menu.UnLoadContent();
@@ -71,6 +44,31 @@ namespace Havoc
             {
                 item.Image.StoreEffects();
                 item.Image.ActivateEffect("FadeEffect");
+            }
+        }
+
+        /*
+            Transitions from one menu to another menu
+        */
+        private void Transition(GameTime gameTime)
+        {
+            if (isTransitioning)
+            {
+
+                for (int i = 0; i < menu.Items.Count; i++)
+                {
+                    menu.Items[i].Image.Update(gameTime);
+                    float first = menu.Items[0].Image.Alpha;
+                    float last = menu.Items[menu.Items.Count - 1].Image.Alpha;
+                    if (first == 0.0f && last == 0.0f)
+                        menu.ID = menu.Items[menu.ItemNumber].LinkID;
+                    else if (first == 1.0f && last == 1.0f)
+                    {
+                        isTransitioning = false;
+                        foreach (MenuItem item in menu.Items)
+                            item.Image.RestoreEffects();
+                    }
+                }
             }
         }
 

@@ -89,7 +89,7 @@ namespace Havoc
             Animations.Add("idle", new Animation());
             Animations.Add("walk", new Animation());
             Animations.Add("jump", new Animation());
-            Animations.Add("kick", new Animation());
+            Animations.Add("jab", new Animation());
             Animations.Add("stun", new Animation());
         }
 
@@ -327,6 +327,9 @@ namespace Havoc
                 // Position hitboxes relative to player's source rectangle
                 HitBox.Rectangle.X = ((int)Image.getPosition().X + Image.SourceRect.Width) - HitBox.Rectangle.X - HitBox.Rectangle.Width;
                 HitBox.Rectangle.Y += (int)Image.getPosition().Y;
+                // Fix wide animations
+                OffSetPlayerAnimation();
+
             }
 
             // Handle logic for CanBeComboed
@@ -337,6 +340,23 @@ namespace Havoc
                 if (ComboCounter >= ComboMaxTimer) CanBeComboed = true;
             }
 
+        }
+
+        public void OffSetPlayerAnimation()
+        {
+            int FrameWidth = Image.getSpriteSheetEffect().FrameWidth;
+            int BaseFrameWidth = Image.getSpriteSheetEffect().PlayerBaseFrameWidth;
+
+            if (!facingRight && FrameWidth > BaseFrameWidth && !Image.getSpriteSheetEffect().PlayerOffset)
+            {
+                Image.setPositionX(Image.getPosition().X - (FrameWidth - BaseFrameWidth));
+                Image.getSpriteSheetEffect().PlayerOffset = true;
+            }
+            else if (Image.getSpriteSheetEffect().PlayerOffset && FrameWidth == BaseFrameWidth)
+            {
+                Image.setPositionX(Image.getPosition().X + (Image.getSpriteSheetEffect().PrevFrameWidth - BaseFrameWidth));
+                Image.getSpriteSheetEffect().PlayerOffset = false;
+            }
         }
 
         /*
@@ -413,10 +433,10 @@ namespace Havoc
             KnockBackVelocity.Y = Health * hitBox.KnockBack.Y;
 
             // Decide if horizontal force is to the left or right
-            if (Image.getPosition().X < player.Image.getPosition().X)
-                KnockBackVelocity.X = Health * -hitBox.KnockBack.X;
-            else
+            if (player.facingRight)
                 KnockBackVelocity.X = Health * hitBox.KnockBack.X;
+            else
+                KnockBackVelocity.X = Health * -hitBox.KnockBack.X;
 
             Velocity.X += KnockBackVelocity.X;
             Velocity.Y -= KnockBackVelocity.Y;
@@ -496,7 +516,6 @@ namespace Havoc
                 if (inputManager.getLeftAnalog(PlayerID).X < -0.1f)
                 {
                     AnalogMovement = inputManager.getLeftAnalog(PlayerID);
-                    Console.WriteLine("test");
                     MoveLeftInput(gameTime);
                 }
                 // Move right with stick
@@ -659,7 +678,7 @@ namespace Havoc
             
             attacking = true;
             Accelerating = false;
-            Image.getSpriteSheetEffect().SetAnimation(Animations["kick"]);
+            Image.getSpriteSheetEffect().SetAnimation(Animations["jab"]);
 
             // Stop player movment
             if (!inAir)

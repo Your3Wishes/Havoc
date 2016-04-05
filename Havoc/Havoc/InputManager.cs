@@ -15,22 +15,10 @@ namespace Havoc
 {
     public class InputManager
     {
-        ScreenManager screenManager;
-        KeyboardState currentKeyState, prevKeyState;
-        GamePadState currentGamePad1State, prevGamePad1State, currentGamePad2State, prevGamePad2State;
-        GamePadCapabilities capabilities1, capabilities2;
-
-        //private static InputManager instance;
-
-        //public static InputManager Instance
-        //{
-        //    get
-        //    {
-        //        if (instance == null)
-        //            instance = new InputManager();
-        //        return instance;
-        //    }
-        //}
+        private ScreenManager screenManager;
+        private KeyboardState currentKeyState, prevKeyState;
+        private GamePadState currentGamePad1State, prevGamePad1State, currentGamePad2State, prevGamePad2State;
+        private GamePadCapabilities capabilities1, capabilities2;
 
         public InputManager(ScreenManager screenManagerReference)
         {
