@@ -7,18 +7,18 @@ namespace Havoc
     
     public class Game1 : Game
     {
-        private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        private ScreenManager screenManager;
-        private InputManager inputManager;
-        private Vector2 virtualScreen = new Vector2(1920, 1080);
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        ScreenManager screenManager;
+        InputManager inputManager;
+
+        Vector2 virtualScreen = new Vector2(1920, 1080);
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             screenManager = new ScreenManager();
             inputManager = new InputManager(screenManager);
-            // Pass created inputManager to ScreenManager
             screenManager.InputManager = inputManager;
             screenManager.InitializeScreen();
             Content.RootDirectory = "Content";
@@ -40,9 +40,11 @@ namespace Havoc
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             screenManager.GraphicsDevice = GraphicsDevice;
             screenManager.SpriteBatch = spriteBatch;
             screenManager.LoadContent(Content);
+
         }
 
         

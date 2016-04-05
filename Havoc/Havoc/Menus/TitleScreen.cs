@@ -10,12 +10,13 @@ namespace Havoc
 {
     public class TitleScreen : GameScreen
     {
-        private MenuManager menuManager;
+        MenuManager menuManager;
 
         public TitleScreen()
         {
             menuManager = new MenuManager(screenManager, inputManager);
         }
+
 
         public override void LoadContent()
         {

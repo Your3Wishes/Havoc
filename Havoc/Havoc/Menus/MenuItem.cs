@@ -7,8 +7,8 @@ namespace Havoc
 {
     public class MenuItem
     {
-        public string LinkType { get; set; }
-        public string LinkID { get; set; }
-        public Image Image { get; set; }
+        public string LinkType;
+        public string LinkID;
+        public Image Image;
     }
 }

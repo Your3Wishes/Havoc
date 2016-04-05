@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Havoc.exe" size="193504">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Havoc.exe" size="191968">
       <assemblyIdentity name="Havoc" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>by/c5t/36IiDJzVs0jven25k4b8=</dsig:DigestValue>
+        <dsig:DigestValue>IaIG02Jo5gxSWFmskqal4/LdI/o=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -198,7 +198,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>uWYeYDO41i2j1BmbSzJefzjRNmo=</dsig:DigestValue>
+      <dsig:DigestValue>wPFAwp1pF+2RhlfVcHOebrpVObk=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\GamePlay\Characters\ryuEvil.xnb" size="1728085">

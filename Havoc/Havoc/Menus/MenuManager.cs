@@ -15,46 +15,20 @@ namespace Havoc
 {
     public class MenuManager
     {
-        private ScreenManager screenManager;
-        private InputManager inputManager;
-        private Menu menu;
-        private bool isTransitioning;
+        ScreenManager screenManager;
+        InputManager inputManager;
+        Menu menu;
+        bool isTransitioning;
 
-        public MenuManager(ScreenManager screenManagerReference, InputManager inputManagerReference)
-        {
-            screenManager = screenManagerReference;
-            inputManager = inputManagerReference;
-            menu = new Menu(screenManager, inputManagerReference);
-            menu.OnMenuChange += menu_OnMenuChange;
-        }
-
-
-        private void menu_OnMenuChange(object sender, EventArgs e)
-        {
-            XmlManager<Menu> xmlMenuManager = new XmlManager<Menu>();
-            menu.UnLoadContent();
-          
-            // Load the new menu
-            menu = xmlMenuManager.Load(menu.ID);
-            menu.LoadContent();
-            menu.OnMenuChange += menu_OnMenuChange;
-            menu.Transition(0.0f);
-
-            foreach (MenuItem item in menu.Items)
-            {
-                item.Image.StoreEffects();
-                item.Image.ActivateEffect("FadeEffect");
-            }
-        }
 
         /*
             Transitions from one menu to another menu
         */
-        private void Transition(GameTime gameTime)
+        void Transition(GameTime gameTime)
         {
             if (isTransitioning)
             {
-
+                
                 for (int i = 0; i < menu.Items.Count; i++)
                 {
                     menu.Items[i].Image.Update(gameTime);
@@ -69,6 +43,34 @@ namespace Havoc
                             item.Image.RestoreEffects();
                     }
                 }
+            }
+        }
+
+
+        public MenuManager(ScreenManager screenManagerReference, InputManager inputManagerReference)
+        {
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
+            menu = new Menu(screenManager, inputManagerReference);
+            menu.OnMenuChange += menu_OnMenuChange;
+        }
+
+
+        void menu_OnMenuChange(object sender, EventArgs e)
+        {
+            XmlManager<Menu> xmlMenuManager = new XmlManager<Menu>();
+            menu.UnLoadContent();
+          
+            // Load the new menu
+            menu = xmlMenuManager.Load(menu.ID);
+            menu.LoadContent();
+            menu.OnMenuChange += menu_OnMenuChange;
+            menu.Transition(0.0f);
+
+            foreach (MenuItem item in menu.Items)
+            {
+                item.Image.StoreEffects();
+                item.Image.ActivateEffect("FadeEffect");
             }
         }
 

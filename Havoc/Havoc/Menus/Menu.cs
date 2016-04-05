@@ -17,17 +17,22 @@ namespace Havoc
 {
     public class Menu
     {
-        [XmlElement("Item")]
-        public List<MenuItem> Items { get; set; }
         public event EventHandler OnMenuChange;
-        public int ItemNumber { get; set; }
+        ScreenManager screenManager;
+        InputManager inputManager;
 
-        private ScreenManager screenManager;
-        private InputManager inputManager;
-        private string Axis;
-        private string Effects;
-        private string id;
-        
+        public string Axis;
+        public string Effects;
+        [XmlElement("Item")]
+        public List<MenuItem> Items;
+        int itemNumber;
+        string id;
+
+        public int ItemNumber
+        {
+            get { return itemNumber; }
+        }
+
         public string ID
         {
             get { return id; }
@@ -36,17 +41,6 @@ namespace Havoc
                 id = value;
                 OnMenuChange(this, null);
             }
-        }
-
-        public Menu(ScreenManager screenManagerReference, InputManager inputManagerReference)
-        {
-            screenManager = screenManagerReference;
-            inputManager = inputManagerReference;
-            id = String.Empty;
-            ItemNumber = 0;
-            Effects = String.Empty;
-            Axis = "Y";
-            Items = new List<MenuItem>();
         }
 
         public void Transition(float alpha)
@@ -60,6 +54,17 @@ namespace Havoc
                 else
                     item.Image.getFadeEffect().Increase = false;
             }
+        }
+
+        public Menu(ScreenManager screenManagerReference, InputManager inputManagerReference)
+        {
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
+            id = String.Empty;
+            itemNumber = 0;
+            Effects = String.Empty;
+            Axis = "Y";
+            Items = new List<MenuItem>();
         }
 
         /*
@@ -125,29 +130,29 @@ namespace Havoc
             if (Axis == "X")
             {
                 if (inputManager.KeyPressed(Keys.Right))
-                    ItemNumber++;
+                    itemNumber++;
                 else if (inputManager.KeyPressed(Keys.Left))
-                    ItemNumber--;
+                    itemNumber--;
             }
             // Vertical Menu
             else if (Axis == "Y")
             {
                 if (inputManager.KeyPressed(Keys.Down))
-                    ItemNumber++;
+                    itemNumber++;
                 else if (inputManager.KeyPressed(Keys.Up))
-                    ItemNumber--;
+                    itemNumber--;
             }
 
             // Make sure itemNumber doesn't exceed items in menu
-            if (ItemNumber < 0)
-                ItemNumber = 0;
-            else if (ItemNumber > Items.Count - 1)
-                ItemNumber = Items.Count - 1;
+            if (itemNumber < 0)
+                itemNumber = 0;
+            else if (itemNumber > Items.Count - 1)
+                itemNumber = Items.Count - 1;
     
             // Activate selected item in menu, deactivate others
             for (int i = 0; i < Items.Count; i++)
             {
-                if (i == ItemNumber)
+                if (i == itemNumber)
                     Items[i].Image.IsActive = true;
                 else
                     Items[i].Image.IsActive = false;
