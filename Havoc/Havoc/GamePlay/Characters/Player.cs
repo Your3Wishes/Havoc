@@ -19,97 +19,90 @@ namespace Havoc
 {
     public class Player
     {
-        /*///////////////////////////////////////*
-         * START OF DATAMEMBERS *
-        */////////////////////////////////////////   
-        public bool DEBUG_HIT_BOX = false; // USED FOR DEBUGGING HITBOXES
-        public int PlayerID; // Identifies who is Player1, Player2, etc...
-        public Image Image; // Holds image of player. Include position, effects, etc...
-        public Vector2 Velocity; // Current speed of player
-        public float MoveSpeed; // Max Speed the player can move
-        public bool Accelerating; // If accelerating movement
-        public float AccelerateSpeed; // Speed the player accelerates (movement)
-        public bool Deccelerating; // If deccelerating movement
-        public float DeccelerateSpeed; // Speed the player deccelerates (movement)
-        public float MoveSpeedInAir;  // Speed the player can move while in air
-        public float Gravity;  // Strength of Gravity
-        public float JumpVelocity; // Jump strength
-        public Vector2 AnalogMovement; // The 2d strength of the analog stick
-        int jumpsLeft; // Number of jumps player has left
+        private bool DEBUG_HIT_BOX = false; // USED FOR DEBUGGING HITBOXES
 
-        public Dictionary<string, Animation> Animations; // Contains the different player animations
-        public Animation CurrentAnimation; // The current player animation
-        public int NumberOfAnimations;  // Number of different animations for player
-        public int Outfit; // The outfit the player uses, (skin)
+        ScreenManager screenManager;
+        InputManager inputManager;
+      
+        public int PlayerID { get; set; } // Identifies who is Player1, Player2, etc...
+        public Image Image { get; set; } // Holds image of player. Include position, effects, etc...
+        public int Outfit { get; set; } // The outfit the player uses, (skin)
+        public HitBox HitBox { get; set; } // The hitbox of the player
 
-        public HitBox HitBox; // The hitbox of the player
-        public bool TakingKnockBack; // If taking a knockback force
-        public Vector2 KnockBackVelocity; // KnockBack strength
-        public float KnockBackAntiVelocity;  // Counteracts horizonal knockback forces
-        public int KnockBackCounter;  // For calculating knockback anti horizonal force
-        public int Health; // The higher the number, the harder hits player takes
+        protected float AccelerateSpeed; // Speed the player accelerates (movement)
+        protected float MoveSpeed; // Max Speed the player can move
+        protected Dictionary<string, Animation> Animations; // Contains the different player animations
+        protected float DeccelerateSpeed; // Speed the player deccelerates (movement)
+        protected float MoveSpeedInAir;  // Speed the player can move while in air
+        protected float Gravity;  // Strength of Gravity
+        protected float JumpVelocity; // Jump strength
+        protected int NumberOfAnimations;  // Number of different animations for player
 
-        public bool HitStun; // The player is in hitstun (can't move)
-        public bool CanBeComboed; // False right after being hit
-        public float ComboCounter; // Used to recharge CanBeComboed
-        public float ComboMaxTimer; // When ComboCounter reaches this number, player can be comboed again
-        public bool TakeXKnockBack; // True if taking horizontal knockback
-  
+        private Vector2 Velocity; // Current speed of player
+        private int jumpsLeft; // Number of jumps player has left
+        private int Health; // The higher the number, the harder hits player takes
+        private Vector2 KnockBackVelocity; // KnockBack strength
+        private Vector2 AnalogMovement; // The 2d coords of the analog stick
+        private float KnockBackAntiVelocity;  // Counteracts horizonal knockback forces
+        private float ComboCounter; // Used to recharge CanBeComboed
+        private float ComboMaxTimer; // When ComboCounter reaches this number, player can be comboed again
+        private bool Accelerating; 
+        private bool Deccelerating; 
+        private bool HitStun; // The player is in hitstun (can't move)
+        private bool CanBeComboed; // False right after being hit
+        private bool attacking; 
+        private bool inAir;
+        private bool jumping;
+        private bool facingRight; 
+        private bool blockedHorizontalRight;
+        private bool blockedHorizontalLeft;
+        private bool TakingKnockBack; 
+        private bool TakeXKnockBack; // True if taking horizontal knockback
 
-        bool facingRight; // True if player is facing to the right
-        bool attacking; // True if player is attacking
-        bool inAir;
-       
-        bool jumping;
-        bool blockedHorizontalRight;
-        bool blockedHorizontalLeft;
-        /*///////////////////////////////////////*
-         * END OF DATAMEMBERS *
-        */////////////////////////////////////////   
-
-        public Player()
+        public Player(ScreenManager screenManagerReference, InputManager inputManagerReference)
         {
-            Image = new Image();
-            Velocity = Vector2.Zero;
-
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
+            Image = new Image(screenManager);
             Outfit = 1;
-            
-            inAir = false;
+            Velocity = Vector2.Zero;
+            KnockBackVelocity = Vector2.Zero;
+            jumpsLeft = 2;
+            Health = 0;
             Gravity = 37.0f;
             KnockBackAntiVelocity = 0.68f;
-            jumping = false;
-            blockedHorizontalRight = false;
-            blockedHorizontalLeft = false;
-            jumpsLeft = 2;
             facingRight = true;
             NumberOfAnimations = 0;
-
             HitBox = new HitBox();
             HitStun = false;
             CanBeComboed = true;
             ComboCounter = 0;
             ComboMaxTimer = 600.0f;
-            Health = 0;
+            jumping = false;
+            inAir = false;
+            blockedHorizontalLeft = false;
+            blockedHorizontalRight = false;
             TakingKnockBack = false;
-            KnockBackVelocity = Vector2.Zero;
 
             // Animations
             Animations = new Dictionary<string, Animation>();
-
             Animations.Add("idle", new Animation());
             Animations.Add("walk", new Animation());
             Animations.Add("jump", new Animation());
-            Animations.Add("kick", new Animation());
+            Animations.Add("jab", new Animation());
             Animations.Add("stun", new Animation());
+        }
 
+        public Player()
+        {
         }
 
         public virtual void LoadContent()
         {
             Image.LoadContent();
-            Image.Position.X = (ScreenManager.Instance.Dimensions.X / 2) - 100; // Set initial player position
-            Image.SpriteSheetEffect.NumberOfAnimations = NumberOfAnimations; // Tell SpriteSheet how many different animations
-            Image.SpriteSheetEffect.SetAnimation(Animations["idle"]); // Set animation to idle
+            Image.setPositionX((screenManager.Dimensions.X / 2) - 100); // Set initial player position
+            Image.getSpriteSheetEffect().NumberOfAnimations = NumberOfAnimations; // Tell SpriteSheet how many different animations
+            Image.getSpriteSheetEffect().SetAnimation(Animations["idle"]); // Set animation to idle
         }
 
         public void UnloadContent()
@@ -122,19 +115,17 @@ namespace Havoc
             if (PlayerID == 0)
                 MoveSpeed = 8;
 
-
             Image.IsActive = true;
 
             // Resest the hitbox
             HitBox.Rectangle = new Rectangle();
 
-            // Handle Input
             HandleInput(gameTime);
 
             HandleLogic(gameTime);
 
             Image.Update(gameTime);
-            Image.Position += Velocity;
+            Image.setPosition(Image.getPosition() + Velocity);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -142,16 +133,15 @@ namespace Havoc
             Image.Draw(spriteBatch);
             if (DEBUG_HIT_BOX)
                 DrawRectangle(HitBox.Rectangle, Color.Aquamarine, spriteBatch);
-           
         }
 
 
         public void CollisionCheck(Platform gameObject)
         {
             // Create new player collision box
-            Rectangle playerRect = new Rectangle((int)Image.Position.X, (int)Image.Position.Y, Image.SourceRect.Width, Image.SourceRect.Height);
+            Rectangle playerRect = new Rectangle((int)Image.getPosition().X, (int)Image.getPosition().Y, Image.SourceRect.Width, Image.SourceRect.Height);
             // Create new gameObject collision box
-            Rectangle gameObjectRect = new Rectangle((int)gameObject.Image.Position.X, (int)gameObject.Image.Position.Y, gameObject.Image.SourceRect.Width, gameObject.Image.SourceRect.Height);
+            Rectangle gameObjectRect = new Rectangle((int)gameObject.Image.getPosition().X, (int)gameObject.Image.getPosition().Y, gameObject.Image.SourceRect.Width, gameObject.Image.SourceRect.Height);
 
             // Check if collision occured
             if (playerRect.Intersects(gameObjectRect))
@@ -162,21 +152,20 @@ namespace Havoc
                 // so that the player lands exactly on top of platform
                 // If we don't do this, player may glitch and land inside 
                 // platform sometimes
-                if ((Image.Position.Y + Image.SourceRect.Height) - 35 < gameObject.Image.Position.Y && Velocity.Y > 0)
+                if ((Image.getPosition().Y + Image.SourceRect.Height) - 35 < gameObject.Image.getPosition().Y && Velocity.Y > 0)
                 {
 
                     // Landed on top of platform
-                    if ((Image.Position.X + Image.SourceRect.Width) - 10 > gameObject.Image.Position.X && 
-                        Image.Position.X + 10 < gameObject.Image.Position.X + gameObject.Image.SourceRect.Width)
+                    if ((Image.getPosition().X + Image.SourceRect.Width) - 10 > gameObject.Image.getPosition().X && 
+                        Image.getPosition().X + 10 < gameObject.Image.getPosition().X + gameObject.Image.SourceRect.Width)
                     {
-                        Image.Position.Y = gameObject.Image.Position.Y - (Image.SourceRect.Height - 1);
+                        Image.setPositionY(gameObject.Image.getPosition().Y - (Image.SourceRect.Height - 1));
                         Velocity.Y = 0;
                         inAir = false;  // Player isn't in the air
                         // Reset jumps
                         jumping = false;
                         jumpsLeft = 2;
                         TakingKnockBack = false;
-                        KnockBackCounter = 0;
                         Velocity.X = 0;
                         TakeXKnockBack = false;
 
@@ -188,37 +177,31 @@ namespace Havoc
                 }
 
                 // Collided with the left side of the object. Blocked on right
-                if ((Image.Position.X + Image.SourceRect.Width) - 10 < gameObject.Image.Position.X)
+                if ((Image.getPosition().X + Image.SourceRect.Width) - 10 < gameObject.Image.getPosition().X)
                 {
                     Velocity.X = 0;
                     blockedHorizontalRight = true;
-                    blockedHorizontalLeft = false;
                 }
                 // Collided with the right size of the object. Block on left
-                else if  (Image.Position.X + 10 > gameObject.Image.Position.X + gameObject.Image.SourceRect.Width)
+                else if  (Image.getPosition().X + 10 > gameObject.Image.getPosition().X + gameObject.Image.SourceRect.Width)
                 {
                     Velocity.X = 0;
-                    blockedHorizontalRight = false;
                     blockedHorizontalLeft = true;
                 }
 
                 // Collided with the bottom of the object
-                if (Image.Position.Y + 20 > gameObject.Image.Position.Y + gameObject.Image.SourceRect.Height)
+                if (Image.getPosition().Y + 20 > gameObject.Image.getPosition().Y + gameObject.Image.SourceRect.Height)
                 {
                     // If in the middle of platform
-                    if ((Image.Position.X + Image.SourceRect.Width) - 10 > gameObject.Image.Position.X &&
-                        Image.Position.X + 10 < gameObject.Image.Position.X + gameObject.Image.SourceRect.Width)
+                    if ((Image.getPosition().X + Image.SourceRect.Width) - 10 > gameObject.Image.getPosition().X &&
+                        Image.getPosition().X + 10 < gameObject.Image.getPosition().X + gameObject.Image.SourceRect.Width)
                     {
                         Velocity.Y = 0;
                         jumping = false;
-                        KnockBackCounter = 0;
                         TakingKnockBack = false;
                         inAir = true;
                     }
-                    
-                    
                 }
-
             }
             else
             {
@@ -242,7 +225,7 @@ namespace Havoc
             if (hitBox.Rectangle.Width <= 0) return; // Empty hitbox
 
             // Create new player collision box
-            Rectangle playerRect = new Rectangle((int)Image.Position.X, (int)Image.Position.Y, Image.SourceRect.Width, Image.SourceRect.Height);
+            Rectangle playerRect = new Rectangle((int)Image.getPosition().X, (int)Image.getPosition().Y, Image.SourceRect.Width, Image.SourceRect.Height);
 
             // Player was hit!
             if (playerRect.Intersects(hitBox.Rectangle))
@@ -289,23 +272,24 @@ namespace Havoc
             if (TakingKnockBack)
             {
                 TakeKnockBack(gameTime);
-                Image.SpriteSheetEffect.SetAnimation(Animations["stun"]);
+                Image.getSpriteSheetEffect().SetAnimation(Animations["stun"]);
             }
 
             // Respawn player if off screen
-            if (Image.Position.Y >= ScreenManager.Instance.Dimensions.Y)
+            if (Image.getPosition().Y >= screenManager.Dimensions.Y)
             {
-                Image.Position.Y = 0;
-                Image.Position.X = ScreenManager.Instance.Dimensions.X / 2;
+                Image.setPositionY(0);
+                //Image.Position.Y = 0;
+                Image.setPositionX(screenManager.Dimensions.X / 2);
+                //Image.Position.X = screenManager.Dimensions.X / 2;
                 Velocity = Vector2.Zero;
-                KnockBackCounter = 0;
                 Health = 0;
             }
 
             // If player is idle, set animation to idle
             if (Velocity.X == 0 && Velocity.Y == 0 && !attacking)
             {
-                Image.SpriteSheetEffect.SetAnimation(Animations["idle"]);
+                Image.getSpriteSheetEffect().SetAnimation(Animations["idle"]);
             }
 
             if (attacking)
@@ -313,9 +297,9 @@ namespace Havoc
                 // Set the player's hitbox to the correct spritesheet frame's hitbox
                 try
                 {
-                    HitBox.Rectangle = Image.SpriteSheetEffect.CurrentAnimation.HitBoxes[(int)Image.SpriteSheetEffect.CurrentFrame.X];
-                    HitBox.Damage = Image.SpriteSheetEffect.CurrentAnimation.Damage;
-                    HitBox.KnockBack = Image.SpriteSheetEffect.CurrentAnimation.KnockBack;
+                    HitBox.Rectangle = Image.getSpriteSheetEffect().CurrentAnimation.HitBoxes[(int)Image.getSpriteSheetEffect().getCurrentFrame().X];
+                    HitBox.Damage = Image.getSpriteSheetEffect().CurrentAnimation.Damage;
+                    HitBox.KnockBack = Image.getSpriteSheetEffect().CurrentAnimation.KnockBack;
                 }
                 catch (IndexOutOfRangeException e)
                 {
@@ -323,7 +307,7 @@ namespace Havoc
                 }
 
                 // Check to see if done attacking
-                if (!Image.SpriteSheetEffect.Animate)
+                if (!Image.getSpriteSheetEffect().Animate)
                 {
                     attacking = false;
                 }
@@ -334,25 +318,45 @@ namespace Havoc
             {
                 Image.SpriteEffect = SpriteEffects.None;
                 // Position hitboxes relative to player's source rectangle
-                HitBox.Rectangle.X += (int)Image.Position.X;
-                HitBox.Rectangle.Y += (int)Image.Position.Y;
+                HitBox.Rectangle.X += (int)Image.getPosition().X;
+                HitBox.Rectangle.Y += (int)Image.getPosition().Y;
             }
             else // Facing left
             {
                 Image.SpriteEffect = SpriteEffects.FlipHorizontally;
                 // Position hitboxes relative to player's source rectangle
-                HitBox.Rectangle.X = ((int)Image.Position.X + Image.SourceRect.Width) - HitBox.Rectangle.X - HitBox.Rectangle.Width;
-                HitBox.Rectangle.Y += (int)Image.Position.Y;
+                HitBox.Rectangle.X = ((int)Image.getPosition().X + Image.SourceRect.Width) - HitBox.Rectangle.X - HitBox.Rectangle.Width;
+                HitBox.Rectangle.Y += (int)Image.getPosition().Y;
+                // Fix wide animations
+                OffSetPlayerAnimation();
+
             }
 
             // Handle logic for CanBeComboed
             if (!CanBeComboed)
             {
-                Image.SpriteSheetEffect.SetAnimation(Animations["stun"]);
+                Image.getSpriteSheetEffect().SetAnimation(Animations["stun"]);
                 ComboCounter += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (ComboCounter >= ComboMaxTimer) CanBeComboed = true;
             }
 
+        }
+
+        public void OffSetPlayerAnimation()
+        {
+            int FrameWidth = Image.getSpriteSheetEffect().FrameWidth;
+            int BaseFrameWidth = Image.getSpriteSheetEffect().PlayerBaseFrameWidth;
+
+            if (!facingRight && FrameWidth > BaseFrameWidth && !Image.getSpriteSheetEffect().PlayerOffset)
+            {
+                Image.setPositionX(Image.getPosition().X - (FrameWidth - BaseFrameWidth));
+                Image.getSpriteSheetEffect().PlayerOffset = true;
+            }
+            else if (Image.getSpriteSheetEffect().PlayerOffset && FrameWidth == BaseFrameWidth)
+            {
+                Image.setPositionX(Image.getPosition().X + (Image.getSpriteSheetEffect().PrevFrameWidth - BaseFrameWidth));
+                Image.getSpriteSheetEffect().PlayerOffset = false;
+            }
         }
 
         /*
@@ -422,19 +426,17 @@ namespace Havoc
         {
             TakingKnockBack = true;
             // Reset the stun animation everytime player gets hit
-            if (Image.SpriteSheetEffect.CurrentAnimation == Animations["stun"])
-                Image.SpriteSheetEffect.CurrentFrame.X = Image.SpriteSheetEffect.CurrentAnimation.StartFrame.X;
+            if (Image.getSpriteSheetEffect().CurrentAnimation == Animations["stun"])
+                Image.getSpriteSheetEffect().RestartAnimation(Animations["stun"]);
             TakeXKnockBack = true;
             Health += (int)hitBox.Damage;
-            KnockBackCounter = 0;
             KnockBackVelocity.Y = Health * hitBox.KnockBack.Y;
 
-
             // Decide if horizontal force is to the left or right
-            if (Image.Position.X < player.Image.Position.X)
-                KnockBackVelocity.X = Health * -hitBox.KnockBack.X;
-            else
+            if (player.facingRight)
                 KnockBackVelocity.X = Health * hitBox.KnockBack.X;
+            else
+                KnockBackVelocity.X = Health * -hitBox.KnockBack.X;
 
             Velocity.X += KnockBackVelocity.X;
             Velocity.Y -= KnockBackVelocity.Y;
@@ -443,8 +445,6 @@ namespace Havoc
 
         public void TakeKnockBack(GameTime gameTime)
         {
-            //Velocity.Y -= (int)gameTime.ElapsedGameTime.TotalMilliseconds * ((float)KnockBackVelocity.Y * 0.1f);
-            
             if (TakeXKnockBack)
             {
                 
@@ -456,7 +456,6 @@ namespace Havoc
                     if (Velocity.X < 0)
                     {
                         Velocity.X = 0;
-                        KnockBackCounter = 0;
                         KnockBackVelocity.X = 0;
                         TakeXKnockBack = false;
                     }
@@ -468,7 +467,6 @@ namespace Havoc
                     if (Velocity.X > 0)
                     {
                         Velocity.X = 0;
-                        KnockBackCounter = 0;
                         KnockBackVelocity.X = 0;
                         TakeXKnockBack = false;
                     }
@@ -483,49 +481,47 @@ namespace Havoc
         */////////////////////////////////////////                                       
         public void HandleInput(GameTime gameTime)
         {
-            // PlayerID 1 is for keyboard
+            // PlayerID 0 is for keyboard
             if (PlayerID == 0)
             {
-                if (InputManager.Instance.KeyDown(Keys.D))
+                if (inputManager.KeyDown(Keys.D))
                 {
                     MoveRightInput(gameTime);   
                 }
-                else if (InputManager.Instance.KeyDown(Keys.A))
+                else if (inputManager.KeyDown(Keys.A))
                 {
                     MoveLeftInput(gameTime);
                     
                 }
-                
                 else
                 {
                     NoMovementInput(gameTime);
                 }
 
-                if (InputManager.Instance.KeyPressed(Keys.Space))
+                if (inputManager.KeyPressed(Keys.Space))
                 {
                     JumpInput();
-
                 }
 
-                if (InputManager.Instance.KeyPressed(Keys.F))
+                if (inputManager.KeyPressed(Keys.F))
                 {
                     JabInput();
                 }
             }
 
             // GamePad Inputs
-            else 
-            {
+            else
+            { 
                 // Move left with stick
-                if (InputManager.Instance.getLeftAnalog(PlayerID).X < -0.1f)
+                if (inputManager.getLeftAnalog(PlayerID).X < -0.1f)
                 {
-                    AnalogMovement = InputManager.Instance.getLeftAnalog(PlayerID);
+                    AnalogMovement = inputManager.getLeftAnalog(PlayerID);
                     MoveLeftInput(gameTime);
                 }
                 // Move right with stick
-                else if (InputManager.Instance.getLeftAnalog(PlayerID).X > 0.1f)
+                else if (inputManager.getLeftAnalog(PlayerID).X > 0.1f)
                 {
-                    AnalogMovement = InputManager.Instance.getLeftAnalog(PlayerID);
+                    AnalogMovement = inputManager.getLeftAnalog(PlayerID);
                     MoveRightInput(gameTime);
                 }
                 else
@@ -534,12 +530,12 @@ namespace Havoc
                     NoMovementInput(gameTime);
                 }
 
-                if (InputManager.Instance.ButtonPressed(PlayerID, Buttons.Y))
+                if (inputManager.ButtonPressed(PlayerID, Buttons.Y))
                 {
                     JumpInput();
                 }
 
-                if (InputManager.Instance.ButtonPressed(PlayerID, Buttons.A))
+                if (inputManager.ButtonPressed(PlayerID, Buttons.A))
                 {
                     JabInput();
                 }
@@ -552,12 +548,10 @@ namespace Havoc
         {
             if (!TakingKnockBack)
             {
-                //Velocity.X = 0;
                 // Deccelerate
                 if (!inAir)
                 {
                     Deccelerating = true;
-                    
                 }
             }
             Accelerating = false;
@@ -607,7 +601,7 @@ namespace Havoc
                     Velocity.X = 0;
                
                 if (!jumping)
-                    Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                    Image.getSpriteSheetEffect().SetAnimation(Animations["walk"]);
             }
         }
 
@@ -660,7 +654,7 @@ namespace Havoc
 
                 if (!jumping)
                 {
-                    Image.SpriteSheetEffect.SetAnimation(Animations["walk"]);
+                    Image.getSpriteSheetEffect().SetAnimation(Animations["walk"]);
                     
                 }
             } 
@@ -672,7 +666,7 @@ namespace Havoc
             if (jumpsLeft > 0 && !attacking)
             {
                 Jump();
-                Image.SpriteSheetEffect.SetAnimation(Animations["jump"]);
+                Image.getSpriteSheetEffect().SetAnimation(Animations["jump"]);
                 jumping = true;
                 // Decrement Jumps
                 jumpsLeft--;
@@ -684,7 +678,7 @@ namespace Havoc
             
             attacking = true;
             Accelerating = false;
-            Image.SpriteSheetEffect.SetAnimation(Animations["kick"]);
+            Image.getSpriteSheetEffect().SetAnimation(Animations["jab"]);
 
             // Stop player movment
             if (!inAir)
@@ -701,7 +695,7 @@ namespace Havoc
         */
         private void DrawRectangle(Rectangle coords, Color color, SpriteBatch spriteBatch)
         {
-            var rect = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
+            var rect = new Texture2D(screenManager.GraphicsDevice, 1, 1);
             rect.SetData(new[] { color });
             spriteBatch.Draw(rect, coords, color);
         }

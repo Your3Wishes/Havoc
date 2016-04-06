@@ -11,13 +11,20 @@ namespace Havoc
 {
     public class Level
     {
-        public List<Platform> platforms;
-        public List<Image> backGroundImages;
+        public List<Platform> Platforms { get; set; }
+
+        protected List<Image> backGroundImages;
+        protected ScreenManager screenManager;
+
+        public Level(ScreenManager screenManagerReference)
+        {
+            screenManager = screenManagerReference;
+            Platforms = new List<Platform>();
+            backGroundImages = new List<Image>();
+        }
 
         public Level()
         {
-            platforms = new List<Platform>();
-            backGroundImages = new List<Image>();
         }
         
 
@@ -38,7 +45,7 @@ namespace Havoc
                 image.Update(gameTime);
             }
 
-            foreach (Platform platform in platforms)
+            foreach (Platform platform in Platforms)
             {
                 platform.Update(gameTime);
             }

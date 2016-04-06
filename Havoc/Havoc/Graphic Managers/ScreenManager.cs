@@ -11,57 +11,43 @@ using Microsoft.Xna.Framework.Content;
 
 
 // Manages all game screens. 
-// This is a singleton class (there is only one
-// ScreenManager class that can be accessed anywhere
-// in the program
 
 namespace Havoc
 {
     public class ScreenManager
     {
-        private static ScreenManager instance;
-        [XmlIgnore]
+        public InputManager InputManager { get; set; }
         public Vector2 Dimensions { private set; get; }
-        [XmlIgnore]
         public ContentManager Content { private set; get; }
-        XmlManager<GameScreen> xmlGameScreenManager;
-
+        
         GameScreen currentScreen, newScreen;
-        [XmlIgnore]
         public GraphicsDevice GraphicsDevice;
-        [XmlIgnore]
         public SpriteBatch SpriteBatch;
-
         public Image Image;
-        [XmlIgnore]
         public bool IsTransitioning { get; private set; }
 
-        // The single ScreenManager instance
-        public static ScreenManager Instance
+
+        public ScreenManager(InputManager inputManagerReference)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    XmlManager<ScreenManager> xml = new XmlManager<ScreenManager>();
-                    instance = xml.Load("Load/ScreenManager.xml");
-                 }
-               
-                return instance;
-            }
+            InputManager = inputManagerReference;
+            Dimensions = new Vector2(1920, 1080);
+            currentScreen = new GamePlayScreen(this, InputManager);
         }
+        
+
 
         /*
             Default constructor
         */
-        private ScreenManager()
+        public ScreenManager()
         {
             Dimensions = new Vector2(1920, 1080);
             
-            currentScreen = new GamePlayScreen();
-            xmlGameScreenManager = new XmlManager<GameScreen>();
-            xmlGameScreenManager.Type = currentScreen.Type;
-            currentScreen = xmlGameScreenManager.Load("Load/GamePlayScreen.xml");
+        }
+
+        public void InitializeScreen()
+        {
+            currentScreen = new GamePlayScreen(this, InputManager);
         }
 
         /*
@@ -74,7 +60,7 @@ namespace Havoc
             IsTransitioning = true;
 
             // Helps with fading transition
-            Image.FadeEffect.Increase = true;
+            Image.getFadeEffect().Increase = true;
             Image.Alpha = 0.0f;            
         }
 
@@ -92,11 +78,11 @@ namespace Havoc
                 {
                     currentScreen.UnloadContent();
                     currentScreen = newScreen;
-                    xmlGameScreenManager.Type = currentScreen.Type;
-                    if (File.Exists(currentScreen.XmlPath))
-                    {
-                        currentScreen = xmlGameScreenManager.Load(currentScreen.XmlPath);
-                    }
+                    //xmlGameScreenManager.Type = currentScreen.Type;
+                    //if (File.Exists(currentScreen.XmlPath))
+                    //{
+                    //    currentScreen = xmlGameScreenManager.Load(currentScreen.XmlPath);
+                    //}
 
                     currentScreen.LoadContent();
                 }
@@ -113,6 +99,10 @@ namespace Havoc
         public void LoadContent(ContentManager Content)
         {
             this.Content = new ContentManager(Content.ServiceProvider, "Content");
+            Image = new Image(this);
+            Image.Path = "ScreenManager/FadeImage";
+            Image.Effects = "FadeEffect";
+            Image.Scale = new Vector2(640, 480);
             currentScreen.LoadContent();
             Image.LoadContent();
         }

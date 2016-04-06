@@ -15,19 +15,47 @@ namespace Havoc
 {
     public class MenuManager
     {
-        Menu menu;
-        bool isTransitioning;
+        private ScreenManager screenManager;
+        private InputManager inputManager;
+        private Menu menu;
+        private bool isTransitioning;
 
+        public MenuManager(ScreenManager screenManagerReference, InputManager inputManagerReference)
+        {
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
+            menu = new Menu(screenManager, inputManagerReference);
+            menu.OnMenuChange += menu_OnMenuChange;
+        }
+
+
+        private void menu_OnMenuChange(object sender, EventArgs e)
+        {
+            XmlManager<Menu> xmlMenuManager = new XmlManager<Menu>();
+            menu.UnLoadContent();
+          
+            // Load the new menu
+            menu = xmlMenuManager.Load(menu.ID);
+            menu.LoadContent();
+            menu.OnMenuChange += menu_OnMenuChange;
+            menu.Transition(0.0f);
+
+            foreach (MenuItem item in menu.Items)
+            {
+                item.Image.StoreEffects();
+                item.Image.ActivateEffect("FadeEffect");
+            }
+        }
 
         /*
             Transitions from one menu to another menu
         */
-        void Transition(GameTime gameTime)
+        private void Transition(GameTime gameTime)
         {
             if (isTransitioning)
             {
-                
-                for (int i = 0; i< menu.Items.Count; i++)
+
+                for (int i = 0; i < menu.Items.Count; i++)
                 {
                     menu.Items[i].Image.Update(gameTime);
                     float first = menu.Items[0].Image.Alpha;
@@ -44,32 +72,6 @@ namespace Havoc
             }
         }
 
-
-        public MenuManager()
-        {
-            menu = new Menu();
-            menu.OnMenuChange += menu_OnMenuChange;
-        }
-
-
-        void menu_OnMenuChange(object sender, EventArgs e)
-        {
-            XmlManager<Menu> xmlMenuManager = new XmlManager<Menu>();
-            menu.UnLoadContent();
-          
-            menu = xmlMenuManager.Load(menu.ID);
-            menu.LoadContent();
-            menu.OnMenuChange += menu_OnMenuChange;
-            menu.Transition(0.0f);
-
-            foreach (MenuItem item in menu.Items)
-            {
-                item.Image.StoreEffects();
-                item.Image.ActivateEffect("FadeEffect");
-            }
-        }
-
-
         public void LoadContent(string menuPath)
         {
             if (menuPath != String.Empty)
@@ -85,11 +87,11 @@ namespace Havoc
         {
             if (!isTransitioning)
                 menu.Update(gameTime);
-            if (InputManager.Instance.KeyPressed(Keys.Enter) && !isTransitioning)
+            if (inputManager.KeyPressed(Keys.Enter) && !isTransitioning)
             {
                 
                 if (menu.Items[menu.ItemNumber].LinkType == "Screen")
-                    ScreenManager.Instance.ChangeScreens(
+                    screenManager.ChangeScreens(
                         menu.Items[menu.ItemNumber].LinkID);
                 else
                 {

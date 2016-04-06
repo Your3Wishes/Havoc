@@ -9,12 +9,19 @@ namespace Havoc
 {
     public class ImageEffect
     {
+        public bool IsActive { get; set; }
+
         protected Image image;
-        public bool IsActive;
+        protected ScreenManager screenManager;
+
+        public ImageEffect(ScreenManager screenManagerReference)
+        {
+            screenManager = screenManagerReference;
+            IsActive = false;
+        }
 
         public ImageEffect()
         {
-            IsActive = false;
         }
 
         public virtual void LoadContent(ref Image image)

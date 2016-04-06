@@ -11,8 +11,15 @@ namespace Havoc
 {
     public class FadeEffect : ImageEffect
     {
-        public float FadeSpeed;
-        public bool Increase;
+        public float FadeSpeed { get; set; }
+        public bool Increase { get; set; }
+
+        public FadeEffect(ScreenManager screenManagerReference)
+            : base(screenManagerReference) 
+        {
+            FadeSpeed = 1;
+            Increase = false;
+        }
 
         public FadeEffect()
         {

@@ -15,7 +15,13 @@ namespace Havoc
     public class BackgroundPanEffect : ImageEffect
     {
 
-        public float PanSpeed;
+        public float PanSpeed { get; set; }
+
+        public BackgroundPanEffect(ScreenManager screenManagerReference)
+            : base(screenManagerReference) 
+        {
+            PanSpeed = -0.35f;
+        }
 
         public BackgroundPanEffect()
         {
@@ -38,16 +44,17 @@ namespace Havoc
 
             if (image.IsActive)
             {
-
                 // If camera is panning left, move image to the right
-                if (Camera2D.PanLeft)
+                if (Camera2D.Instance.PanLeft)
                 {
-                    image.Position.X += PanSpeed * Camera2D.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100.0f;
+                    image.setPositionX(image.getPosition().X + PanSpeed * Camera2D.Instance.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.01f);
+                    //image.Position.X += PanSpeed * Camera2D.Instance.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.01f;
                 }
                 // If camera is panning right, move image to the left
-                else if (Camera2D.PanRight) 
+                else if (Camera2D.Instance.PanRight) 
                 {
-                    image.Position.X -= PanSpeed * Camera2D.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 100.0f;
+                    image.setPositionX(image.getPosition().X - PanSpeed * Camera2D.Instance.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.01f);
+                    //image.Position.X -= PanSpeed * Camera2D.Instance.AbsXDistance * (float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.01f;
                 }
             }
         }

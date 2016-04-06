@@ -7,26 +7,27 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-// Represents an object that doesn't move on GameScreen
-// Entities can collide with StaticGameObject
+
 
 namespace Havoc
 {
     public class Platform
     {
-        public Image Image;
+        public Image Image { get; set; }
 
-        public Platform()
+        private ScreenManager screenManager;
+
+        public Platform(ScreenManager screenManagerReference)
         {
-            Image = new Image();
+            screenManager = screenManagerReference;
+            Image = new Image(screenManager);
         }
-
 
         public void LoadContent()
         {
             Image.LoadContent();
-            Image.Position.X = ScreenManager.Instance.Dimensions.X / 2 - (Image.SourceRect.Width / 2);
-            Image.Position.Y = ScreenManager.Instance.Dimensions.Y - 450;
+            Image.setPositionX(screenManager.Dimensions.X / 2 - (Image.SourceRect.Width / 2));
+            Image.setPositionY(screenManager.Dimensions.Y - 450);
         }
 
         public void UnloadContent()

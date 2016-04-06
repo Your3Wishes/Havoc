@@ -16,25 +16,24 @@ namespace Havoc
 {
     public class GameScreen
     {
-
+        protected ScreenManager screenManager;
+        protected InputManager inputManager;
         protected ContentManager content;
-        [XmlIgnore]
-        public Type Type;
-
-        public string XmlPath;
-
+        
+        public GameScreen(ScreenManager screenManagerReference, InputManager inputManagerReference)
+        {
+            screenManager = screenManagerReference;
+            inputManager = inputManagerReference;
+        }
 
         public GameScreen()
         {
-            Type = this.GetType();
-            // Loads specific GameScreen xmlPath; e.g. Load/SplashScreen.xml
-            XmlPath = "Load/" + Type.ToString().Replace("Havoc.", "") + ".xml";
         }
 
         public virtual void LoadContent()
         {
             content = new ContentManager(
-                ScreenManager.Instance.Content.ServiceProvider, "Content");
+                screenManager.Content.ServiceProvider, "Content");
         }
 
         public virtual void UnloadContent()
@@ -44,7 +43,7 @@ namespace Havoc
 
         public virtual void Update(GameTime gameTime)
         {
-            InputManager.Instance.Update();
+            inputManager.Update();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
