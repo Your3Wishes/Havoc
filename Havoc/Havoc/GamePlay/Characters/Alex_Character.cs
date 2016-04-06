@@ -23,12 +23,11 @@ namespace Havoc
 
         public override void LoadContent()
         {
-            
             MoveSpeed = 450;
             AccelerateSpeed = 34.5f;
             DeccelerateSpeed = 125.5f;
             MoveSpeedInAir = 270;
-            NumberOfAnimations = 5;
+            NumberOfAnimations = 6;
 
             JumpVelocity = 12.7f;
             Image.Effects = "SpriteSheetEffect";
@@ -73,15 +72,32 @@ namespace Havoc
             Animations["jab"].Speed = 60;
             Animations["jab"].Damage = 3.0f;
             Animations["jab"].KnockBack = new Vector2( 0.0022f, 0.006f);
-
             Animations["jab"].Repeat = false;
+
             Animations["jab"].HitBoxes = new Rectangle[Animations["jab"].NumberOfFrames];
             Animations["jab"].HitBoxes[0] = new Rectangle(0, 0, 0, 0); // No hitbox on this frame
             Animations["jab"].HitBoxes[1] = new Rectangle(55, 20, 40, 51);
             Animations["jab"].HitBoxes[2] = new Rectangle(60, 20, 50, 60);
             Animations["jab"].HitBoxes[3] = new Rectangle(60, 65, 33, 33);
             Animations["jab"].HitBoxes[4] = new Rectangle(0, 0, 0, 0); // No hitbox on this frame
-            // END jab ANIMATION DATA
+            // END jab Animation Data
+
+            // fair Animation DATA
+            Animations["fair"].StartFrame = new Vector2(0, 5);
+            Animations["fair"].NumberOfFrames = 3;
+            Animations["fair"].NumberOfTotalFrames = 5;
+            Animations["fair"].Speed = 150;
+            Animations["fair"].Damage = 4.0f;
+            Animations["fair"].KnockBack = new Vector2(.04f, .01f);
+            Animations["fair"].Repeat = false;
+
+            Animations["fair"].HitBoxes = new Rectangle[Animations["fair"].NumberOfFrames];
+            Animations["fair"].HitBoxes[0] = new Rectangle(0, 0, 0, 0); // No hitbox on this frame
+            Animations["fair"].HitBoxes[1] = new Rectangle(58, 68, 40, 15); // No hitbox on this frame
+            Animations["fair"].HitBoxes[2] = new Rectangle(0, 0, 0, 0); // No hitbox on this frame
+            // End fair Animation Data
+
+
 
             Animations["stun"].StartFrame = new Vector2(0, 4);
             Animations["stun"].NumberOfFrames = 4;

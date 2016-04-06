@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>D:/GitHub/Havoc/Havoc/Havoc/Content/GamePlay/Characters/Ryu.png</SourceFile>
-  <SourceTime>2016-04-04T22:52:50.9192702-05:00</SourceTime>
+  <SourceTime>2016-04-06T00:23:46.3393502-05:00</SourceTime>
   <DestFile>D:/GitHub/Havoc/Havoc/Havoc/Content/bin/Windows/GamePlay/Characters/Ryu.xnb</DestFile>
-  <DestTime>2016-04-04T22:52:54.2109302-05:00</DestTime>
+  <DestTime>2016-04-06T00:23:53.4330804-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-04-29T12:14:44-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
