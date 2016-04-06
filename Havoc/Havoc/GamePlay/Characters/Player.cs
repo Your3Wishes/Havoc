@@ -19,7 +19,7 @@ namespace Havoc
 {
     public class Player
     {
-        private bool DEBUG_HIT_BOX = false; // USED FOR DEBUGGING HITBOXES
+        private bool DEBUG_HIT_BOX = true; // USED FOR DEBUGGING HITBOXES
 
         ScreenManager screenManager;
         InputManager inputManager;
@@ -29,17 +29,17 @@ namespace Havoc
         public int Outfit { get; set; } // The outfit the player uses, (skin)
         public HitBox HitBox { get; set; } // The hitbox of the player
 
-        protected float AccelerateSpeed; // Speed the player accelerates (movement)
-        protected float MoveSpeed; // Max Speed the player can move
-        protected Dictionary<string, Animation> Animations; // Contains the different player animations
-        protected float DeccelerateSpeed; // Speed the player deccelerates (movement)
+        protected float AccelerateSpeed;
+        protected float MoveSpeed; 
+        protected Dictionary<string, Animation> Animations; 
+        protected float DeccelerateSpeed; 
         protected float MoveSpeedInAir;  // Speed the player can move while in air
         protected float Gravity;  // Strength of Gravity
         protected float JumpVelocity; // Jump strength
         protected int NumberOfAnimations;  // Number of different animations for player
 
         private Vector2 Velocity; // Current speed of player
-        private int jumpsLeft; // Number of jumps player has left
+        private int jumpsLeft; 
         private int Health; // The higher the number, the harder hits player takes
         private Vector2 KnockBackVelocity; // KnockBack strength
         private Vector2 AnalogMovement; // The 2d coords of the analog stick
@@ -90,6 +90,7 @@ namespace Havoc
             Animations.Add("walk", new Animation());
             Animations.Add("jump", new Animation());
             Animations.Add("jab", new Animation());
+            Animations.Add("fair", new Animation());
             Animations.Add("stun", new Animation());
         }
 
@@ -507,6 +508,11 @@ namespace Havoc
                 {
                     JabInput();
                 }
+
+                if ( ((facingRight && inputManager.KeyDown(Keys.D)) || (!facingRight && inputManager.KeyDown(Keys.A))) && inputManager.KeyPressed(Keys.F))
+                {
+                    FairInput();
+                }
             }
 
             // GamePad Inputs
@@ -540,6 +546,13 @@ namespace Havoc
                     JabInput();
                 }
 
+                if (( (facingRight && inputManager.getLeftAnalog(PlayerID).X > 0.1f) ||
+                      (!facingRight && inputManager.getLeftAnalog(PlayerID).X < 0.1f)) && 
+                       inputManager.ButtonPressed(PlayerID, Buttons.A))
+                {
+                    FairInput();
+                }
+
 
             }
         }
@@ -557,6 +570,7 @@ namespace Havoc
             Accelerating = false;
         }
 
+        // TODO: Allow player to move in air while doing fair (attacking)
         public void MoveRightInput(GameTime gameTime)
         {
             if (!attacking)
@@ -675,16 +689,29 @@ namespace Havoc
 
         public void JabInput()
         {
-            
-            attacking = true;
-            Accelerating = false;
-            Image.getSpriteSheetEffect().SetAnimation(Animations["jab"]);
+            if (!attacking && !inAir)
+            {
+                attacking = true;
+                Accelerating = false;
+                Image.getSpriteSheetEffect().SetAnimation(Animations["jab"]);
 
-            // Stop player movment
-            if (!inAir)
-                Velocity.X = 0;
+                // Stop player movment
+                if (!inAir)
+                    Velocity.X = 0;
+            }
+            
 
         }
+
+        public void FairInput()
+        {
+            if (!attacking && inAir)
+            {
+                attacking = true;
+                Image.getSpriteSheetEffect().SetAnimation(Animations["fair"]);
+            }
+        }
+
         /*///////////////////////////////////////*
          * END OF INPUT AND MOVEMENT FUNCTIONS *
         */////////////////////////////////////////

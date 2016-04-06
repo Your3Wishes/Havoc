@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Havoc.exe" size="193504">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Havoc.exe" size="194016">
       <assemblyIdentity name="Havoc" version="3.4.0.456" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>by/c5t/36IiDJzVs0jven25k4b8=</dsig:DigestValue>
+        <dsig:DigestValue>fG3MZOvBTDVYd+PoYnOHlXjMg14=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -192,22 +192,22 @@
       <dsig:DigestValue>D8ljIanDatlA0RShpaofuK7z7DE=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\GamePlay\Characters\Ryu.xnb" size="1728085">
+  <file name="Content\GamePlay\Characters\Ryu.xnb" size="2073685">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>uWYeYDO41i2j1BmbSzJefzjRNmo=</dsig:DigestValue>
+      <dsig:DigestValue>MQgeNZP9qOAHjMkbDUc0PP8KA6o=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Content\GamePlay\Characters\ryuEvil.xnb" size="1728085">
+  <file name="Content\GamePlay\Characters\ryuEvil.xnb" size="2073685">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>dTPgNpPaoZRVTj9Y2Y8+33rlR5M=</dsig:DigestValue>
+      <dsig:DigestValue>xHRGo1XGDvKMvKgf0vP51bqE9MM=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Content\GamePlay\Characters\Subzero.xnb" size="111413">
